@@ -12,7 +12,6 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class OrderEquipment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Double rentPrice;
     @ManyToOne

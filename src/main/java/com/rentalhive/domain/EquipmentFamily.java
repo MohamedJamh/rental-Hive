@@ -3,6 +3,7 @@ package com.rentalhive.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Setter
@@ -16,5 +17,5 @@ public class EquipmentFamily {
     private Long id;
     private String name;
     @OneToMany
-    private Equipment equipment;
+    private List<Equipment> equipment;
 }
