@@ -1,6 +1,5 @@
 package com.rentalhive.domain;
 
-import liquibase.pro.packaged.I;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,6 +17,4 @@ public class Location {
     private String name;
     private Double latitude;
     private Double longitude;
-    //@OneToOne
-    //private Order order;
 }

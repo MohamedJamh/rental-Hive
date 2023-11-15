@@ -18,6 +18,5 @@ public class Equipment {
     @Column(unique = true)
     private String name;
     private Integer quantity;
-    @OneToMany
-    private List<EquipmentItem> equipmentItems;
+
 }

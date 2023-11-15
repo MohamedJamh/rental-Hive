@@ -14,9 +14,9 @@ public class OrderEquipment {
     @Id
     private Long id;
     private Double rentPrice;
-    @ManyToOne
+    /*@ManyToOne
     private Order order;
     @ManyToOne
-    private EquipmentItem equipmentItem;
+    private EquipmentItem equipmentItem;*/
 
 }

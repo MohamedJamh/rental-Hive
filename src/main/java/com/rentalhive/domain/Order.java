@@ -3,6 +3,7 @@ package com.rentalhive.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +22,6 @@ public class Order {
     private LocalDateTime rentEndDate;
     @OneToOne
     private Location constructLocation;
-    //@OneToMany
-    //private List<Offer> offers;
-    @OneToMany(mappedBy = "order")
-    private List<OrderEquipment> orderEquipments;
+    @ManyToMany
+    private List<EquipmentItem> equipmentItems;
 }
