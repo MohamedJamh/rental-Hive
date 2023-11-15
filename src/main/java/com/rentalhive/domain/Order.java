@@ -19,9 +19,9 @@ public class Order {
     private LocalDateTime rentStartDate;
     private LocalDateTime rentEndDate;
     @OneToOne
-    private Location construct_location;
-    @OneToMany
-    private List<Offer> offers;
-    @OneToMany(mappedBy = "equipmentItem")
+    private Location constructLocation;
+    //@OneToMany
+    //private List<Offer> offers;
+    @OneToMany(mappedBy = "order")
     private List<OrderEquipment> orderEquipments;
 }

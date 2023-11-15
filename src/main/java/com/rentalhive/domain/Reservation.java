@@ -16,6 +16,6 @@ public class Reservation {
     private Long id;
     @OneToOne
     private Offer offer;
-    @OneToOne
-    private Contract contract;
+    //@OneToOne
+    //private Contract contract;
 }

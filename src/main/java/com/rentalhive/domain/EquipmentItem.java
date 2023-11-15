@@ -20,6 +20,6 @@ public class EquipmentItem {
     private String reference;
     @Enumerated(EnumType.STRING)
     private EquipmentItemStatus status = EquipmentItemStatus.AVAILABLE;
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "equipmentItem")
     private List<OrderEquipment> orderEquipments;
 }

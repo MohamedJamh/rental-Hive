@@ -20,7 +20,7 @@ public class Offer {
     private OfferStatus status;
     @ManyToOne
     private Order order;
-    @OneToOne
-    private Reservation reservation;
+    //@OneToOne
+    //private Reservation reservation;
 
 }
