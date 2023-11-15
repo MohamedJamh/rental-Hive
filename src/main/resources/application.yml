@@ -20,6 +20,6 @@ spring:
     password:
   jpa:
     show-sql: true
-  liquibase:
-    enabled: true
-    change-log: db/master.xml
+    hibernate:
+      ddl-auto: create-drop
+    generate-ddl: true
