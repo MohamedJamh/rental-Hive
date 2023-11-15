@@ -22,6 +22,6 @@ public class Order {
     private LocalDateTime rentEndDate;
     @OneToOne
     private Location constructLocation;
-    @ManyToMany
-    private List<EquipmentItem> equipmentItems;
+    @OneToMany(mappedBy = "order")
+    private List<OrderEquipment> orderEquipments;
 }

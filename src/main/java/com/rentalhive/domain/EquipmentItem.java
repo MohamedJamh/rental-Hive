@@ -22,6 +22,6 @@ public class EquipmentItem {
     private EquipmentItemStatus status = EquipmentItemStatus.AVAILABLE;
     @OneToOne
     private Equipment equipment;
-    @ManyToMany
-    private List<Order> orders;
+    @OneToMany(mappedBy = "equipmentItem")
+    private List<OrderEquipment> orderEquipments;
 }
