@@ -1,12 +1,13 @@
 package com.rentalhive.web.rest;
 
 import com.rentalhive.domain.Equipment;
+import com.rentalhive.dto.EquipmentDto;
+import com.rentalhive.mapper.EquipmentDtoMapper;
 import com.rentalhive.service.EquipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,8 +20,14 @@ public class EquipmentRest {
         this.equipmentService = equipmentService;
     }
 
-    @GetMapping("")
+    @GetMapping("/")
     public List<Equipment> getAllEquipments(){
         return equipmentService.findAll();
+    }
+
+    @PostMapping("/save")
+    public Equipment addEquipment(@Valid @RequestBody EquipmentDto equipmentDto){
+        Equipment equipment = EquipmentDtoMapper.toEquipment(equipmentDto);
+        return equipmentService.save(equipment);
     }
 }
