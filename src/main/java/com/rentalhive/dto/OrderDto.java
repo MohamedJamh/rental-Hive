@@ -1,6 +1,5 @@
-package com.rentalhive.web.rest.httpDto;
+package com.rentalhive.dto;
 
-import com.rentalhive.domain.Equipment;
 import com.rentalhive.domain.EquipmentItem;
 import com.rentalhive.domain.Location;
 import com.sun.istack.NotNull;
@@ -17,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderRequestDto {
+public class OrderDto {
 
     @NotNull
     List<EquipmentItem> equipmentItems;
