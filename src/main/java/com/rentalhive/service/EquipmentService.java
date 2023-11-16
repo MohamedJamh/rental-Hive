@@ -13,4 +13,5 @@ public interface EquipmentService {
     public List<Equipment> findAll();
     public void delete(Long id);
     public Optional<Equipment> findById(Long id);
+    public void deleteAll();
 }

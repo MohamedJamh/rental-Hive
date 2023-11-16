@@ -43,4 +43,9 @@ public class EquipmentServiceImpl implements EquipmentService {
     public Optional<Equipment> findById(Long id) {
         return equipmentRepository.findById(id);
     }
+
+    @Override
+    public void deleteAll() {
+        equipmentRepository.deleteAll();
+    }
 }
