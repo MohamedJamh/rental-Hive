@@ -12,6 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class OrderEquipment {
     @Id
+    @GeneratedValue
     private Long id;
     private Double rentPrice;
     @ManyToOne

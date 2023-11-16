@@ -1,8 +1,8 @@
 package com.rentalhive.service;
 
 import com.rentalhive.domain.Order;
-import com.rentalhive.web.rest.httpDto.OrderRequestDto;
+import com.rentalhive.dto.OrderDto;
 
 public interface OrderService {
-    Order createOrder(OrderRequestDto orderRequestDto);
+    Order createOrder(OrderDto orderRequestDto);
 }

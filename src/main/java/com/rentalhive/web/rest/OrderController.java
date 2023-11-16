@@ -1,8 +1,8 @@
 package com.rentalhive.web.rest;
 
 import com.rentalhive.domain.Order;
+import com.rentalhive.dto.OrderDto;
 import com.rentalhive.service.OrderService;
-import com.rentalhive.web.rest.httpDto.OrderRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody OrderRequestDto orderRequest) {
+    public ResponseEntity<Order> createOrder(@RequestBody OrderDto orderRequest) {
         // Implement request validation and call orderService.createOrder
         throw new IllegalArgumentException("not implemented yet");
     }

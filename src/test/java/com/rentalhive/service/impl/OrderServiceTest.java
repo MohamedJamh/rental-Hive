@@ -3,15 +3,13 @@ package com.rentalhive.service.impl;
 import com.rentalhive.domain.EquipmentItem;
 import com.rentalhive.domain.Location;
 import com.rentalhive.domain.Order;
-import com.rentalhive.domain.OrderEquipment;
+import com.rentalhive.dto.OrderDto;
 import com.rentalhive.repository.OrderRepository;
-import com.rentalhive.web.rest.httpDto.OrderRequestDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
@@ -33,6 +31,7 @@ public class OrderServiceTest {
     public void testCreateOrder() {
         // Arrange
         List<EquipmentItem> orderEquipments = new ArrayList<>();
+        orderEquipments.add(EquipmentItem.builder().build());
         LocalDateTime rentStartDate = LocalDateTime.now();
         LocalDateTime rentEndDate = rentStartDate.plusDays(7);
         Location location = Location.builder().name("casa").latitude(24.).longitude(23.).build();
@@ -42,7 +41,7 @@ public class OrderServiceTest {
 
         // Act
         Order createdOrder = orderService.createOrder(
-                new OrderRequestDto(orderEquipments, rentStartDate, rentEndDate, location));
+                new OrderDto(orderEquipments, rentStartDate, rentEndDate, location));
 
         // Assert
         assertNotNull(createdOrder);
