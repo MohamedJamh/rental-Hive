@@ -1,6 +1,5 @@
 package com.rentalhive.mapper;
 
-import com.rentalhive.domain.Organization;
 import com.rentalhive.domain.Role;
 import com.rentalhive.domain.User;
 import com.rentalhive.dto.UserDto;
@@ -23,13 +22,17 @@ public class UserDtoMapper {
                 .createdAt(user.getCreatedAt())
                 .verifiedAt(user.getVerifiedAt())
                 .rolesId(user.getRoles().stream().map(Role::getId).toList())
-                .organizationId(user.getOrganization().getId())
+                .organization(
+                        OrganizationDtoMapper.toDto(user.getOrganization())
+                )
                 .build();
     }
     public static User toEntity(UserDto userDto) {
         List<Role> roles = new ArrayList<>();
-        for (Long roleId : userDto.getRolesId()) {
-            roles.add(Role.builder().id(roleId).build());
+        if(userDto.getRolesId() != null){
+            for (Long roleId : userDto.getRolesId()) {
+                roles.add(Role.builder().id(roleId).build());
+            }
         }
         return User.builder()
             .firstName(userDto.getFirstName())
@@ -40,9 +43,7 @@ public class UserDtoMapper {
             .verifiedAt(userDto.getVerifiedAt())
             .roles(roles)
             .organization(
-                    Organization.builder()
-                            .id(userDto.getOrganizationId())
-                            .build()
+                    OrganizationDtoMapper.toEntity(userDto.getOrganization())
             )
             .build();
     }

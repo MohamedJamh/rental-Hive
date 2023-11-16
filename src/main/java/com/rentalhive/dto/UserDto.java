@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,12 +18,18 @@ import java.util.List;
 @AllArgsConstructor
 public class UserDto {
     private Long id;
+    @NotNull(message = "First name cannot be null")
     private String firstName;
+    @NotNull(message = "Last name cannot be null")
     private String lastName;
+    @NotNull(message = "Email cannot be null")
+    @Email(message = "Email should be valid")
     private String email;
+    @Min(value = 8,message = "Password should be at least 8 characters")
     private String password;
     private LocalDateTime createdAt;
     private LocalDateTime verifiedAt;
     private List<Long> rolesId;
-    private Long organizationId;
+    @NotNull(message = "Organization cannot be null")
+    private OrganizationDto organization;
 }
