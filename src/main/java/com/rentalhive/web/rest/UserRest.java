@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -23,6 +24,14 @@ public class UserRest {
         this.userService = userService;
     }
 
+    @GetMapping
+    public ResponseEntity<Response<List<ResponseUserDto>>> findAll(){
+        Response<List<ResponseUserDto>> userResponse = new Response<>();
+        List<User> users = userService.findAll();
+        List<ResponseUserDto> usersDto = users.stream().map(UserDtoMapper::toDto).toList();
+        userResponse.setResult(usersDto);
+        return new ResponseEntity<>(userResponse, HttpStatus.OK);
+    }
 
     @PostMapping
     public ResponseEntity<Response<ResponseUserDto>> save(@RequestBody @Valid RequestUserDto userDto){
@@ -32,4 +41,5 @@ public class UserRest {
         userResponse.setMessage("User saved successfully");
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
+
 }

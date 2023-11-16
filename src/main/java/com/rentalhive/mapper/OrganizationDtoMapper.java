@@ -5,7 +5,7 @@ import com.rentalhive.dto.OrganizationDto;
 
 public class OrganizationDtoMapper {
 
-    private OrganizationDtoMapper(){
+    private OrganizationDtoMapper() {
     }
 
     public static OrganizationDto toDto(Organization organization){

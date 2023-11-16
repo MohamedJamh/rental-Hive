@@ -38,6 +38,8 @@ public class UserDtoMapper {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())
+                .createdAt(user.getCreatedAt())
+                .verifiedAt(user.getVerifiedAt())
                 .rolesId(user.getRoles().stream().map(Role::getId).toList())
                 .organizationName(user.getOrganization().getName())
                 .build();
