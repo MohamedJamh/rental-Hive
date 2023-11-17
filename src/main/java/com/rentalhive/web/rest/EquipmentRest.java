@@ -39,22 +39,11 @@ public class EquipmentRest {
         return equipmentService.save(equipment);
     }
 
-//    @DeleteMapping("/delete/{id}")
-//    public ResponseEntity<HttpStatus> deleteBook(@PathVariable Long id) {
-//        try {
-//            equipmentService.delete(id);
-//            String message = "Equipment has been successfully deleted";
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteBook(@PathVariable Long id) {
         try {
             equipmentService.delete(id);
-            String message = "Equipment a supprimé avec success";
+            String message = "Equipment a été supprimé avec success";
             return ResponseEntity.ok(message);
         } catch (Exception e) {
             String errorMessage = "Erreur lors de la suppression !";
@@ -66,7 +55,7 @@ public class EquipmentRest {
     public ResponseEntity<String> deleteAllBooks() {
         try {
             equipmentService.deleteAll();
-            String message = "Equipment a supprimé avec success";
+            String message = "Equipments sont supprimés avec success";
             return ResponseEntity.ok(message);
         } catch (Exception e) {
             String errorMessage = "Erreur lors de la suppression !";

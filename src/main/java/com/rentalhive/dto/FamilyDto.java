@@ -1,6 +1,5 @@
 package com.rentalhive.dto;
 
-import com.rentalhive.domain.EquipmentFamily;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,9 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EquipmentDto {
+public class FamilyDto {
     private Long id;
     private String name;
-    private Integer quantity;
-    private EquipmentFamily equipmentFamily;
 }

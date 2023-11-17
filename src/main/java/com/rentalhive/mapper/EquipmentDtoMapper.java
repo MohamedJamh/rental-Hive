@@ -12,6 +12,7 @@ public class EquipmentDtoMapper {
                 .id(equipment.getId())
                 .name(equipment.getName())
                 .quantity(equipment.getQuantity())
+                .equipmentFamily(equipment.getEquipmentFamily())
                 .build();
     }
 
@@ -20,6 +21,7 @@ public class EquipmentDtoMapper {
                 .id(equipmentDto.getId())
                 .name(equipmentDto.getName())
                 .quantity(equipmentDto.getQuantity())
+                .equipmentFamily(equipmentDto.getEquipmentFamily())
                 .build();
     }
 }

@@ -1,11 +1,11 @@
 package com.rentalhive.domain;
 
 import lombok.*;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Setter
 @Getter
@@ -24,4 +24,6 @@ public class Equipment {
     @Min(value = 0, message = "Quantity must be greater than or equal to {value}")
     private Integer quantity;
 
+    @ManyToOne @NotNull(message = "Error : Equipment must not be null")
+    private EquipmentFamily equipmentFamily;
 }
