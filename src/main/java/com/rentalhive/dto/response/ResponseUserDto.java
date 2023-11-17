@@ -1,10 +1,11 @@
-package com.rentalhive.dto;
+package com.rentalhive.dto.response;
 
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,14 +14,13 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class ResponseUserDto {
     private Long id;
     private String firstName;
     private String lastName;
     private String email;
-    private String password;
     private LocalDateTime createdAt;
     private LocalDateTime verifiedAt;
     private List<Long> rolesId;
-    private Long organizationId;
+    private String organizationName;
 }
