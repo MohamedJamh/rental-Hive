@@ -1,9 +1,9 @@
 package com.rentalhive.mapper;
 
-import com.rentalhive.domain.Organization;
 import com.rentalhive.domain.Role;
 import com.rentalhive.domain.User;
-import com.rentalhive.dto.UserDto;
+import com.rentalhive.dto.request.RequestUserDto;
+import com.rentalhive.dto.response.ResponseUserDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,37 +13,35 @@ public class UserDtoMapper {
     private UserDtoMapper() {
     }
 
-    public static UserDto toDto(User user) {
-        return UserDto.builder()
+    public static User toEntity(RequestUserDto userDto) {
+        List<Role> roles = new ArrayList<>();
+        if(userDto.getRolesId() != null){
+            for (Long roleId : userDto.getRolesId()) {
+                roles.add(Role.builder().id(roleId).build());
+            }
+        }
+        return User.builder()
+                .firstName(userDto.getFirstName())
+                .lastName(userDto.getLastName())
+                .email(userDto.getEmail())
+                .password(userDto.getPassword())
+                .roles(roles)
+                .organization(
+                        OrganizationDtoMapper.toEntity(userDto.getOrganization())
+                )
+                .build();
+    }
+
+    public static ResponseUserDto toDto(User user) {
+        return ResponseUserDto.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .email(user.getEmail())
-                .password(user.getPassword())
                 .createdAt(user.getCreatedAt())
                 .verifiedAt(user.getVerifiedAt())
                 .rolesId(user.getRoles().stream().map(Role::getId).toList())
-                .organizationId(user.getOrganization().getId())
+                .organizationName(user.getOrganization().getName())
                 .build();
-    }
-    public static User toEntity(UserDto userDto) {
-        List<Role> roles = new ArrayList<>();
-        for (Long roleId : userDto.getRolesId()) {
-            roles.add(Role.builder().id(roleId).build());
-        }
-        return User.builder()
-            .firstName(userDto.getFirstName())
-            .lastName(userDto.getLastName())
-            .email(userDto.getEmail())
-            .password(userDto.getPassword())
-            .createdAt(userDto.getCreatedAt())
-            .verifiedAt(userDto.getVerifiedAt())
-            .roles(roles)
-            .organization(
-                    Organization.builder()
-                            .id(userDto.getOrganizationId())
-                            .build()
-            )
-            .build();
     }
 }
