@@ -5,9 +5,9 @@ server:
     include-message: always
     include-binding-errors: always
 
+
 # Spring Configuration
 spring:
-
   #to enable colors when you run your app outside intellij
   output:
     ansi:
