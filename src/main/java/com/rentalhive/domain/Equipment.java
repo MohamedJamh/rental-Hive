@@ -3,7 +3,9 @@ package com.rentalhive.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Setter
 @Getter
@@ -12,11 +14,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Equipment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(unique = true)
+    @NotBlank(message = "Name is Invalid : blank name")
     private String name;
+
+    @Min(value = 0, message = "Quantity must be greater than or equal to {value}")
     private Integer quantity;
 
+    @ManyToOne @NotNull(message = "Error : Equipment must not be null")
+    private EquipmentFamily equipmentFamily;
 }

@@ -20,7 +20,8 @@ public class User {
     private String lastName;
     private String email;
     private String password;
-    private LocalDateTime createdAt;
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime verifiedAt;
     @ManyToMany
     private List<Role> roles;

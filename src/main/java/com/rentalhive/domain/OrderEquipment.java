@@ -1,5 +1,6 @@
 package com.rentalhive.domain;
 
+import com.rentalhive.domain.embedded.OrderEquipmentId;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,13 +12,17 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderEquipment {
-    @Id
-    @GeneratedValue
-    private Long id;
+
+    @EmbeddedId
+    private OrderEquipmentId orderEquipmentId;
     private Double rentPrice;
+
     @ManyToOne
+    @MapsId("order")
     private Order order;
+
     @ManyToOne
+    @MapsId("equipmentItem")
     private EquipmentItem equipmentItem;
 
 }
