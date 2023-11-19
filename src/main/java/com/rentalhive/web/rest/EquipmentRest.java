@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/equipments")
@@ -28,15 +29,29 @@ public class EquipmentRest {
     }
 
     @PostMapping("/save")
-    public Equipment addEquipment(@Valid @RequestBody EquipmentDto equipmentDto){
-        Equipment equipment = EquipmentDtoMapper.toEquipment(equipmentDto);
-        return equipmentService.save(equipment);
+    public ResponseEntity<Equipment> addEquipment(@Valid @RequestBody EquipmentDto equipmentDto){
+        try{
+            Equipment equipment = EquipmentDtoMapper.toEquipment(equipmentDto);
+            return new ResponseEntity<>(equipmentService.save(equipment),HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    @PutMapping("/update")
-    public Equipment updateEquipment(@Valid @RequestBody EquipmentDto equipmentDto){
-        Equipment equipment = EquipmentDtoMapper.toEquipment(equipmentDto);
-        return equipmentService.save(equipment);
+    @PutMapping("/{id}")
+    public ResponseEntity<Equipment> updateEquipment(@Valid @PathVariable("id") long id, @RequestBody EquipmentDto equipmentDto){
+        try{
+            Optional<Equipment> eq = equipmentService.findById(id);
+            if(eq.isPresent()){
+                Equipment equipment = EquipmentDtoMapper.toEquipment(equipmentDto);
+                equipment.setId(id);
+                return new ResponseEntity<>(equipmentService.save(equipment),HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("/delete/{id}")
