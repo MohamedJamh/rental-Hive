@@ -5,6 +5,8 @@ import com.rentalhive.domain.User;
 import com.rentalhive.repository.OrganizationRepository;
 import com.rentalhive.repository.UserRepository;
 import com.rentalhive.service.UserService;
+import com.rentalhive.utils.CustomError;
+import com.rentalhive.utils.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,9 @@ public class UserServiceImpl implements UserService {
         this.organizationRepository = organizationRepository;
     }
     @Override
-    public User save(User user) {
+    public User save(User user) throws ValidationException {
+        if(userRepository.findByEmail(user.getEmail()).isPresent())
+            throw new ValidationException(new CustomError("Email","Email already exists"));
         Optional<Organization> optionalOrganization = organizationRepository.findByName(user.getOrganization().getName());
         if(optionalOrganization.isEmpty()){
             organizationRepository.save(user.getOrganization());
