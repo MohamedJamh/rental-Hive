@@ -7,7 +7,6 @@ import com.rentalhive.utils.CustomError;
 import com.rentalhive.utils.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +41,11 @@ public class FamilyServiceImpl implements FamilyService {
     }
 
     @Override
-    public EquipmentFamily update(EquipmentFamily equipmentFamily) {
+    public EquipmentFamily update(EquipmentFamily equipmentFamily) throws ValidationException {
+        Optional<EquipmentFamily> optionalEquipmentFamily = familyRepository.findById(equipmentFamily.getId());
+        if (optionalEquipmentFamily.isEmpty()) {
+            throw new ValidationException(new CustomError("id", "Equipment family does not exist"));
+        }
         return familyRepository.save(equipmentFamily);
     }
 

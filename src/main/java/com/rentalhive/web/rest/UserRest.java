@@ -6,6 +6,7 @@ import com.rentalhive.dto.response.ResponseUserDto;
 import com.rentalhive.mapper.UserDtoMapper;
 import com.rentalhive.service.impl.UserServiceImpl;
 import com.rentalhive.utils.Response;
+import com.rentalhive.utils.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,20 +27,26 @@ public class UserRest {
 
     @GetMapping
     public ResponseEntity<Response<List<ResponseUserDto>>> findAll(){
-        Response<List<ResponseUserDto>> userResponse = new Response<>();
+        Response<List<ResponseUserDto>> response = new Response<>();
         List<User> users = userService.findAll();
         List<ResponseUserDto> usersDto = users.stream().map(UserDtoMapper::toDto).toList();
-        userResponse.setResult(usersDto);
-        return new ResponseEntity<>(userResponse, HttpStatus.OK);
+        response.setResult(usersDto);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Response<ResponseUserDto>> save(@RequestBody @Valid RequestUserDto userDto){
-        Response<ResponseUserDto> userResponse = new Response<>();
-        User user = userService.save(UserDtoMapper.toEntity(userDto));
-        userResponse.setResult(UserDtoMapper.toDto(user));
-        userResponse.setMessage("User saved successfully");
-        return new ResponseEntity<>(userResponse, HttpStatus.OK);
+        Response<ResponseUserDto> response = new Response<>();
+        try {
+            User user = UserDtoMapper.toEntity(userDto);
+            response.setResult(UserDtoMapper.toDto(userService.save(user)));
+            response.setMessage("User has been saved successfully");
+        } catch (ValidationException e) {
+            response.setErrors(List.of(e.getCustomError()));
+            response.setMessage("User has not been saved");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

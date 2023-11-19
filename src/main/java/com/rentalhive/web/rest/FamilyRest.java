@@ -39,18 +39,23 @@ public class FamilyRest {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update")
-    public EquipmentFamily updateFamily(@Valid @RequestBody FamilyDto familyDto) {
-        /*EquipmentFamily equipmentFamily = FamilyDtoMapper.toFamily(familyDto);
+    @PutMapping("/{id}")
+    public ResponseEntity<Response<FamilyDto>> updateFamily(@Valid @RequestBody FamilyDto familyDto, @PathVariable Long id) {
+        Response<FamilyDto> response = new Response<>();
+        EquipmentFamily equipmentFamily = FamilyDtoMapper.toFamily(familyDto);
+        equipmentFamily.setId(id);
         try {
-            return familyService.save(equipmentFamily);
-        } catch (CustomError e) {
-            throw new RuntimeException(e);
-        }*/
-        return null;
+            response.setResult(FamilyDtoMapper.toDto(familyService.update(equipmentFamily)));
+            response.setMessage("Equipment family has been updated successfully");
+        }catch (ValidationException e) {
+            response.setMessage("Equipment family has not been updated");
+            response.setErrors(List.of(e.getCustomError()));
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/")
+    @GetMapping
     public List<EquipmentFamily> findAll(){
         return familyService.findAll();
     }
