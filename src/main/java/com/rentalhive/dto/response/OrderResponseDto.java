@@ -1,4 +1,4 @@
-package com.rentalhive.dto;
+package com.rentalhive.dto.response;
 
 import com.rentalhive.domain.Location;
 import com.rentalhive.dto.request.EquipmentRequestDTO;
@@ -17,10 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderDto {
-
-    @NotNull
-    List<EquipmentRequestDTO> equipments;
+public class OrderResponseDto {
     @DateTimeFormat
     @NotNull
     LocalDateTime start;

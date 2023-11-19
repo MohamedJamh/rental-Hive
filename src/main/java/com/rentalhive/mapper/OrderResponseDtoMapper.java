@@ -1,24 +1,24 @@
 package com.rentalhive.mapper;
 
 import com.rentalhive.domain.Order;
-import com.rentalhive.domain.OrderEquipment;
 import com.rentalhive.dto.OrderDto;
 import com.rentalhive.dto.request.EquipmentRequestDTO;
+import com.rentalhive.dto.response.OrderResponseDto;
 
 import java.util.List;
 
-public class OrderDtoMapper {
+public class OrderResponseDtoMapper {
 
-    private OrderDtoMapper() {
+    private OrderResponseDtoMapper() {
     }
 
-    public static OrderDto toDto(Order order) {
-        return OrderDto.builder()
+    public static OrderResponseDto toDto(Order order) {
+        return OrderResponseDto.builder()
                 .end(order.getRentEndDate())
                 .start(order.getRentStartDate())
                 .build();
     }
-    public static Order toEntity(OrderDto orderDto) {
+    public static Order toEntity(OrderResponseDto orderDto) {
         return Order.builder()
                 .rentStartDate(orderDto.getStart())
                 .rentEndDate(orderDto.getEnd())
