@@ -3,8 +3,11 @@ package com.rentalhive.service.impl;
 import com.rentalhive.domain.EquipmentFamily;
 import com.rentalhive.repository.FamilyRepository;
 import com.rentalhive.service.FamilyService;
+import com.rentalhive.utils.CustomError;
+import com.rentalhive.utils.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +23,11 @@ public class FamilyServiceImpl implements FamilyService {
     }
 
     @Override
-    public EquipmentFamily save(EquipmentFamily equipmentFamily) {
+    public EquipmentFamily save(EquipmentFamily equipmentFamily) throws ValidationException{
+        Optional<EquipmentFamily> optionalEquipmentFamily = familyRepository.findByName(equipmentFamily.getName());
+        if(optionalEquipmentFamily.isPresent()){
+            throw new ValidationException(new CustomError("name", "Equipment family with this name already exists"));
+        }
         return familyRepository.save(equipmentFamily);
     }
 
