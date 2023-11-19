@@ -2,17 +2,11 @@ package com.rentalhive.service.impl;
 
 import com.rentalhive.domain.*;
 import com.rentalhive.domain.embedded.OrderEquipmentId;
-import com.rentalhive.dto.EquipmentDto;
 import com.rentalhive.dto.OrderDto;
 import com.rentalhive.dto.request.EquipmentRequestDTO;
-import com.rentalhive.dto.response.EquipmentResponseDTO;
 import com.rentalhive.dto.response.OrderResponseDto;
-import com.rentalhive.enums.EquipmentItemStatus;
-import com.rentalhive.mapper.EquipmentDtoMapper;
-import com.rentalhive.mapper.EquipmentRequestDTOMapper;
 import com.rentalhive.mapper.OrderDtoMapper;
 import com.rentalhive.mapper.OrderResponseDtoMapper;
-import com.rentalhive.repository.OrderEquipmentRepository;
 import com.rentalhive.repository.OrderRepository;
 import com.rentalhive.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +24,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final EquipmentItemServiceImpl equipmentItemService;
     private final User userConnected;
+    private final OrderEquipmentService orderEquipmentService;
 
     @Override
     @Transactional
@@ -70,6 +65,10 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderEquipments(orderEquipment);
         // TODO: get the user authenticated
         order.setUser(userConnected);
+        orderRepository.save(order);
+
+        var orderEquipmentsSaved = orderEquipmentService.saveAll(orderEquipment);
+        order.setOrderEquipments(orderEquipmentsSaved);
         Order savedOrder = orderRepository.save(order);
 
         return OrderResponseDtoMapper.toDto(savedOrder);
