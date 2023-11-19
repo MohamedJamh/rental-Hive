@@ -24,4 +24,6 @@ public class Order {
     private Location constructLocation;
     @OneToMany(mappedBy = "order")
     private List<OrderEquipment> orderEquipments;
+    @ManyToOne
+    private User user;
 }
