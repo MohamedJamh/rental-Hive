@@ -1,10 +1,17 @@
 package com.rentalhive.service.impl;
 
-import com.rentalhive.domain.EquipmentItem;
-import com.rentalhive.domain.Order;
-import com.rentalhive.domain.OrderEquipment;
+import com.rentalhive.domain.*;
+import com.rentalhive.domain.embedded.OrderEquipmentId;
+import com.rentalhive.dto.EquipmentDto;
 import com.rentalhive.dto.OrderDto;
+import com.rentalhive.dto.request.EquipmentRequestDTO;
+import com.rentalhive.dto.response.EquipmentResponseDTO;
+import com.rentalhive.dto.response.OrderResponseDto;
+import com.rentalhive.enums.EquipmentItemStatus;
+import com.rentalhive.mapper.EquipmentDtoMapper;
+import com.rentalhive.mapper.EquipmentRequestDTOMapper;
 import com.rentalhive.mapper.OrderDtoMapper;
+import com.rentalhive.mapper.OrderResponseDtoMapper;
 import com.rentalhive.repository.OrderEquipmentRepository;
 import com.rentalhive.repository.OrderRepository;
 import com.rentalhive.service.OrderService;
@@ -21,25 +28,60 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-    private final OrderEquipmentRepository orderEquipmentRepository;
+    private final EquipmentItemServiceImpl equipmentItemService;
+    private final User userConnected;
 
     @Override
     @Transactional
-    public Order createOrder(OrderDto orderRequestDto) {
-        List<EquipmentItem> equipmentItems = orderRequestDto.getEquipmentItems();
+    public OrderResponseDto createOrder(OrderDto orderDto) {
+        List<EquipmentRequestDTO> equipments = orderDto.getEquipments();
+        checkIfCanReserveEquipments(orderDto);
+        LocalDateTime endDate = orderDto.getEnd();
+        LocalDateTime startDate = orderDto.getStart();
         final List<OrderEquipment> orderEquipment = new ArrayList<>();
-        if(equipmentItems.isEmpty())
-            throw new IllegalArgumentException("No equipment is selected");
-        if(orderRequestDto.getEnd()
-                .isBefore(orderRequestDto.getStart()))
-            throw new IllegalArgumentException("Date start should be before date end");
-        Order order = OrderDtoMapper.toEntity(orderRequestDto);
+        final List<EquipmentItem> equipmentItems = new ArrayList<>();
+
+        for (EquipmentRequestDTO equipmentDto:
+                equipments) {
+            List<EquipmentItem> equipmentItems1 = equipmentItemService.findAvailableEquipmentItemsByEquipmentId(equipmentDto.getId(), startDate, endDate);
+            if(equipmentDto.getQuantityReserved() > equipmentItems1.size())
+                throw new IllegalArgumentException("Quantity reserve more than quantity exist");
+
+            for (int i = 0; i < equipmentDto.getQuantityReserved(); i++) {
+                EquipmentItem equipmentItem = equipmentItems1.get(i);
+                equipmentItems.add(equipmentItem);
+            }
+        }
+
+        Order order = OrderDtoMapper.toEntity(orderDto);
+
         equipmentItems.forEach(equipmentItem ->
                 orderEquipment.add(OrderEquipment.builder()
+                                .orderEquipmentId(
+                                        OrderEquipmentId.builder()
+                                                .equipmentItem(equipmentItem)
+                                                .order(order)
+                                                .build()
+                                )
                         .equipmentItem(equipmentItem)
                         .order(order)
                         .build()));
+
         order.setOrderEquipments(orderEquipment);
-        return orderRepository.save(order);
+        // TODO: get the user authenticated
+        order.setUser(userConnected);
+        Order savedOrder = orderRepository.save(order);
+
+        return OrderResponseDtoMapper.toDto(savedOrder);
+    }
+
+    private void checkIfCanReserveEquipments(OrderDto orderDto) {
+        List<EquipmentRequestDTO> equipments = orderDto.getEquipments();
+        if(equipments.isEmpty())
+            throw new IllegalArgumentException("No equipment is selected");
+
+        if(orderDto.getEnd()
+                .isBefore(orderDto.getStart()))
+            throw new IllegalArgumentException("Date start should be before date end");
     }
 }
