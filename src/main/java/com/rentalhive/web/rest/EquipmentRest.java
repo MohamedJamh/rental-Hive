@@ -2,25 +2,29 @@ package com.rentalhive.web.rest;
 
 import com.rentalhive.domain.Equipment;
 import com.rentalhive.dto.EquipmentDto;
+import com.rentalhive.dto.response.EquipmentResponseDTO;
 import com.rentalhive.mapper.EquipmentDtoMapper;
 import com.rentalhive.service.EquipmentService;
+import com.rentalhive.service.impl.EquipmentItemServiceImpl;
+import com.rentalhive.utils.Response;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/equipments")
+@RequiredArgsConstructor
 public class EquipmentRest {
-    private final EquipmentService equipmentService;
 
-    @Autowired
-    public EquipmentRest(EquipmentService equipmentService) {
-        this.equipmentService = equipmentService;
-    }
+    private final EquipmentService equipmentService;
+    private final EquipmentItemServiceImpl equipmentItemService;
 
     @GetMapping("/")
     public List<Equipment> getAllEquipments(){
@@ -62,5 +66,16 @@ public class EquipmentRest {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(errorMessage);
         }
+    }
+
+    @GetMapping("/available")
+    public ResponseEntity<Response<List<EquipmentResponseDTO>>> getEquipmentAvailable(
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end
+    ) {
+        Response<List<EquipmentResponseDTO>> response = new Response<>();
+        response.setMessage("Retrieve equipment is successful");
+        response.setResult(equipmentItemService.findAvailableEquipments(start, end));
+        return ResponseEntity.ok().body(response);
     }
 }

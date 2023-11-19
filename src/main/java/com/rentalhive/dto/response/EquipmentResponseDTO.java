@@ -1,4 +1,4 @@
-package com.rentalhive.dto;
+package com.rentalhive.dto.response;
 
 import com.rentalhive.domain.EquipmentFamily;
 import lombok.AllArgsConstructor;
@@ -12,10 +12,9 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EquipmentDto {
-    @NotNull
+public class EquipmentResponseDTO {
     private Long id;
     private String name;
-    private Integer quantity;
+    private Integer quantityAvailable;
     private EquipmentFamily equipmentFamily;
 }
