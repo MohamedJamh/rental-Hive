@@ -3,12 +3,10 @@ package com.rentalhive.web.rest;
 import com.rentalhive.domain.Equipment;
 import com.rentalhive.domain.EquipmentFamily;
 import com.rentalhive.dto.request.RequestEquipmentDto;
-import com.rentalhive.dto.response.ResponseEquipmentDto;
 import com.rentalhive.mapper.EquipmentDtoMapper;
 import com.rentalhive.service.EquipmentService;
 import com.rentalhive.service.FamilyService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +32,7 @@ public class EquipmentRest {
     public ResponseEntity<Equipment> addEquipment(@Valid @RequestBody RequestEquipmentDto requestEquipmentDto){
         try{
             Equipment equipment = EquipmentDtoMapper.toEquipment(requestEquipmentDto);
-            EquipmentFamily family = familyService.findById(requestEquipmentDto.getEquipmentFamily_id()).orElseThrow();
+            EquipmentFamily family = familyService.findById(requestEquipmentDto.getEquipmentFamilyId()).orElseThrow();
             equipment.setEquipmentFamily(family);
             return new ResponseEntity<>(equipmentService.save(equipment),HttpStatus.CREATED);
         }catch (Exception e){
@@ -49,7 +47,7 @@ public class EquipmentRest {
             if(eq.isPresent()){
                 Equipment equipment = EquipmentDtoMapper.toEquipment(requestEquipmentDto);
                 equipment.setId(id);
-                EquipmentFamily family = familyService.findById(requestEquipmentDto.getEquipmentFamily_id()).orElseThrow();
+                EquipmentFamily family = familyService.findById(requestEquipmentDto.getEquipmentFamilyId()).orElseThrow();
                 equipment.setEquipmentFamily(family);
                 return new ResponseEntity<>(equipmentService.save(equipment),HttpStatus.OK);
             } else {
