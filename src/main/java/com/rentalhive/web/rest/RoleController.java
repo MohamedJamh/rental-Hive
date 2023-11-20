@@ -23,16 +23,17 @@ public class RoleController {
     }
 
     @PostMapping("/role/save")
-    public ResponseEntity<String> save(@RequestParam String name){
-        role.setName(name);
+    public ResponseEntity<Role> save(@RequestParam String name){
+        Role role1 = new Role();
+        role1.setName(name);
 
-        if (roleService.save(role) == null) {
+        if (roleService.save(role1) == null) {
             return new ResponseEntity<>(
-                    "Role not saved", HttpStatus.BAD_REQUEST
+                     HttpStatus.BAD_REQUEST
             );
         }
         return new ResponseEntity<>(
-                "Role saved", HttpStatus.OK
+                role1, HttpStatus.OK
         );
     }
 
