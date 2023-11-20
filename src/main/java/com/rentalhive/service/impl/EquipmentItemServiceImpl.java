@@ -51,4 +51,8 @@ public class EquipmentItemServiceImpl {
     public List<EquipmentItem> findAvailableEquipmentItemsByEquipmentId(Long id, LocalDateTime startDate, LocalDateTime endDate) {
         return repository.findAvailableEquipmentItemsByEquipmentId(id, startDate, endDate);
     }
+    public List<EquipmentItem> saveAll(List<EquipmentItem> equipmentItems) {
+        return repository.saveAll(equipmentItems);
+    }
+
 }
