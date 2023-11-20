@@ -1,5 +1,6 @@
 package com.rentalhive.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,6 +25,9 @@ public class Equipment {
     @Min(value = 0, message = "Quantity must be greater than or equal to {value}")
     private Integer quantity;
 
-    @ManyToOne @NotNull(message = "Error : Equipment must not be null")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonBackReference
+    @JoinColumn(name = "equipment_family_id")
+    @NotNull(message = "Error : Equipment must not be null")
     private EquipmentFamily equipmentFamily;
 }
