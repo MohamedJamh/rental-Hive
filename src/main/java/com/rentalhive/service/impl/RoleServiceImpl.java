@@ -3,6 +3,8 @@ package com.rentalhive.service.impl;
 import com.rentalhive.domain.Role;
 import com.rentalhive.repository.RoleRepository;
 import com.rentalhive.service.RoleService;
+import com.rentalhive.utils.CustomError;
+import com.rentalhive.utils.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,14 +23,16 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role save(Role role) {
-        validateRole(role);
+    public Role save(Role role) throws ValidationException {
+        Optional<Role> optionalRole = roleRepository.findByName(role.getName());
+        if (optionalRole.isPresent())
+            throw new ValidationException(new CustomError("name", "Role with this name already exists"));
         return roleRepository.save(role);
     }
 
     @Override
     public Role findByName(String name) {
-        return roleRepository.findByName(name);
+        return roleRepository.findByName(name).orElse(null);
     }
 
     @Override
@@ -51,22 +55,6 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findById(id).get();
     }
 
-    private void validateRole(Role role) {
-        validateNonNull(role);
-        validateRoleName(role.getName());
-    }
-
-    private void validateNonNull(Role role) {
-        if (role == null) {
-            throw new IllegalArgumentException("Role cannot be null");
-        }
-    }
-
-    private void validateRoleName(String roleName) {
-        if (roleName == null || roleName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Role name cannot be blank");
-        }
-    }
 
 
 }
