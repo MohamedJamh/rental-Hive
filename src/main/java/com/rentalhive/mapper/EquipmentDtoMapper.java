@@ -1,7 +1,6 @@
 package com.rentalhive.mapper;
 
 import com.rentalhive.domain.Equipment;
-import com.rentalhive.domain.EquipmentFamily;
 import com.rentalhive.dto.request.RequestEquipmentDto;
 import com.rentalhive.dto.response.ResponseEquipmentDto;
 

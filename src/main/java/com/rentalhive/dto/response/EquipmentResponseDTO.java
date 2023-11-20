@@ -12,10 +12,9 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ResponseEquipmentDto {
-    @NotNull
+public class EquipmentResponseDTO {
     private Long id;
     private String name;
-    private Integer quantity;
+    private Integer quantityAvailable;
     private EquipmentFamily equipmentFamily;
 }

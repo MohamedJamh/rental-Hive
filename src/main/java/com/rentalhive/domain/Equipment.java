@@ -1,5 +1,6 @@
 package com.rentalhive.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,8 +20,11 @@ public class Equipment {
 
     @Column(unique = true)
     private String name;
+
     private Integer quantity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonBackReference
+    @JoinColumn(name = "equipment_family_id")
     private EquipmentFamily equipmentFamily;
 }

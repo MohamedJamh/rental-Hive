@@ -24,6 +24,5 @@ public class RequestEquipmentDto {
     @NotNull(message = "quantity cannot be null")
     private Integer quantity;
 
-    @NotNull(message = "equipmentFamily cannot be null")
     private Long equipmentFamilyId;
 }
