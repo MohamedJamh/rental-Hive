@@ -1,4 +1,4 @@
-package com.rentalhive.dto;
+package com.rentalhive.dto.request;
 
 import com.rentalhive.domain.EquipmentFamily;
 import lombok.AllArgsConstructor;
@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EquipmentDto {
+public class RequestEquipmentDto {
     private Long id;
     private String name;
     private Integer quantity;
-    private EquipmentFamily equipmentFamily;
+    private Long equipmentFamily_id;
 }

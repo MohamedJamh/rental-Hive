@@ -24,6 +24,6 @@ public class Equipment {
     @Min(value = 0, message = "Quantity must be greater than or equal to {value}")
     private Integer quantity;
 
-    @ManyToOne @NotNull(message = "Error : Equipment must not be null")
+    @ManyToOne
     private EquipmentFamily equipmentFamily;
 }

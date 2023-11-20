@@ -1,9 +1,13 @@
 package com.rentalhive.web.rest;
 
 import com.rentalhive.domain.Equipment;
-import com.rentalhive.dto.EquipmentDto;
+import com.rentalhive.domain.EquipmentFamily;
+import com.rentalhive.dto.request.RequestEquipmentDto;
+import com.rentalhive.dto.response.ResponseEquipmentDto;
 import com.rentalhive.mapper.EquipmentDtoMapper;
 import com.rentalhive.service.EquipmentService;
+import com.rentalhive.service.FamilyService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,37 +18,39 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/equipments")
+@RequestMapping("/api/equipment")
+@RequiredArgsConstructor
 public class EquipmentRest {
     private final EquipmentService equipmentService;
+    private final FamilyService familyService;
 
-    @Autowired
-    public EquipmentRest(EquipmentService equipmentService) {
-        this.equipmentService = equipmentService;
-    }
 
-    @GetMapping("/")
+    @GetMapping()
     public List<Equipment> getAllEquipments(){
         return equipmentService.findAll();
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<Equipment> addEquipment(@Valid @RequestBody EquipmentDto equipmentDto){
+    @PostMapping()
+    public ResponseEntity<Equipment> addEquipment(@Valid @RequestBody RequestEquipmentDto requestEquipmentDto){
         try{
-            Equipment equipment = EquipmentDtoMapper.toEquipment(equipmentDto);
-            return new ResponseEntity<>(equipmentService.save(equipment),HttpStatus.OK);
+            Equipment equipment = EquipmentDtoMapper.toEquipment(requestEquipmentDto);
+            EquipmentFamily family = familyService.findById(requestEquipmentDto.getEquipmentFamily_id()).orElseThrow();
+            equipment.setEquipmentFamily(family);
+            return new ResponseEntity<>(equipmentService.save(equipment),HttpStatus.CREATED);
         }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Equipment> updateEquipment(@Valid @PathVariable("id") long id, @RequestBody EquipmentDto equipmentDto){
+    public ResponseEntity<Equipment> updateEquipment(@Valid @PathVariable("id") long id, @RequestBody RequestEquipmentDto requestEquipmentDto){
         try{
             Optional<Equipment> eq = equipmentService.findById(id);
             if(eq.isPresent()){
-                Equipment equipment = EquipmentDtoMapper.toEquipment(equipmentDto);
+                Equipment equipment = EquipmentDtoMapper.toEquipment(requestEquipmentDto);
                 equipment.setId(id);
+                EquipmentFamily family = familyService.findById(requestEquipmentDto.getEquipmentFamily_id()).orElseThrow();
+                equipment.setEquipmentFamily(family);
                 return new ResponseEntity<>(equipmentService.save(equipment),HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -54,7 +60,7 @@ public class EquipmentRest {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteBook(@PathVariable Long id) {
         try {
             equipmentService.delete(id);
