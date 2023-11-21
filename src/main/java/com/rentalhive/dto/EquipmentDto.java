@@ -20,9 +20,9 @@ public class EquipmentDto {
     @NotNull
     @NotBlank(message = "Name is Invalid : blank name")
     private String name;
-    @NotNull(message = "Equipment must not be null")
+    @NotNull(message = "quantity must not be null")
     @Min(value = 0, message = "Quantity must be greater than or equal to 0")
     private Integer quantity;
-    @NotNull(message = "Equipment must not be null")
+    @NotNull(message = "Equipment familyId must not be null")
     private Long equipmentFamilyId;
 }

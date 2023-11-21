@@ -2,6 +2,7 @@ package com.rentalhive.domain.listener;
 
 import com.rentalhive.domain.Equipment;
 import com.rentalhive.domain.EquipmentItem;
+import com.rentalhive.enums.EquipmentItemStatus;
 import com.rentalhive.service.impl.EquipmentItemServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,7 @@ public class EquipmentListener {
             equipmentItems.add(
                     EquipmentItem.builder()
                             .equipment(equipment)
+                            .status(EquipmentItemStatus.AVAILABLE)
                             .reference(UUID.randomUUID().toString())
                             .build()
             );
