@@ -3,6 +3,8 @@ package com.rentalhive.service.impl;
 import com.rentalhive.domain.Equipment;
 import com.rentalhive.repository.EquipmentRepository;
 import com.rentalhive.service.EquipmentService;
+import com.rentalhive.utils.CustomError;
+import com.rentalhive.utils.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +27,12 @@ public class EquipmentServiceImpl implements EquipmentService {
     }
 
     @Override
-    public Equipment update(Equipment equipment) {
+    public Equipment update(Equipment equipment) throws ValidationException {
+        Optional<Equipment> equipmentOptional = equipmentRepository.findById(equipment.getId());
+        if(equipmentOptional.isEmpty())
+            throw new ValidationException( new CustomError("id","Equipment doesn't exist"));
+        if(equipment.getQuantity() < equipmentOptional.get().getQuantity())
+            throw new RuntimeException("Quantity can't be less than the previous one");
         return equipmentRepository.save(equipment);
     }
 
