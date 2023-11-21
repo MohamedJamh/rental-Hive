@@ -7,6 +7,7 @@ import com.rentalhive.mapper.EquipmentDtoMapper;
 import com.rentalhive.service.EquipmentService;
 import com.rentalhive.service.impl.EquipmentItemServiceImpl;
 import com.rentalhive.utils.Response;
+import com.rentalhive.utils.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -37,10 +38,20 @@ public class EquipmentRest {
         return equipmentService.save(equipment);
     }
 
-    @PutMapping("/update")
-    public Equipment updateEquipment(@Valid @RequestBody EquipmentDto equipmentDto){
+    @PutMapping("/{id}")
+    public ResponseEntity<Response<EquipmentDto>> updateEquipment(@Valid @RequestBody EquipmentDto equipmentDto, @PathVariable Long id){
+        Response<EquipmentDto> response = new Response<>();
         Equipment equipment = EquipmentDtoMapper.toEquipment(equipmentDto);
-        return equipmentService.save(equipment);
+        equipment.setId(id);
+        try {
+            response.setResult(EquipmentDtoMapper.toDto(equipmentService.update(equipment)));
+            response.setMessage("Equipment has been updated successfully");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (ValidationException ex){
+            response.setMessage("Equipment has not been updated");
+            response.setErrors(List.of(ex.getCustomError()));
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/delete/{id}")
@@ -49,7 +60,7 @@ public class EquipmentRest {
             equipmentService.delete(id);
             String message = "Equipment a été supprimé avec success";
             return ResponseEntity.ok(message);
-        } catch (Exception e) {
+        }catch (Exception e) {
             String errorMessage = "Erreur lors de la suppression !";
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(errorMessage);
