@@ -1,6 +1,7 @@
 package com.rentalhive.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.rentalhive.domain.listener.EquipmentListener;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(EquipmentListener.class)
 public class Equipment {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

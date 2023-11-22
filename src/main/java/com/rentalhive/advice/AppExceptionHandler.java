@@ -1,5 +1,6 @@
 package com.rentalhive.advice;
 
+import com.rentalhive.exception.QuantityExceededException;
 import com.rentalhive.utils.CustomError;
 import com.rentalhive.utils.Response;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,20 @@ public class AppExceptionHandler {
             String errorMessage = error.getDefaultMessage();
             errorList.add(new CustomError(fieldName, errorMessage));
         });
+        response.setErrors(errorList);
+        return response;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(QuantityExceededException.class)
+    private Response<Object> handleValidationExceptions(QuantityExceededException ex) {
+        Response<Object> response = new Response<>();
+        List<CustomError> errorList = new ArrayList<>();
+        response.setMessage("Quantity reservation exception");
+        errorList.add(CustomError.builder()
+                .field("quantityReserved")
+                .message(ex.getMessage())
+                .build());
         response.setErrors(errorList);
         return response;
     }

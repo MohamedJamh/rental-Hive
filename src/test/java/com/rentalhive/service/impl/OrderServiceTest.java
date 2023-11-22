@@ -5,6 +5,7 @@ import com.rentalhive.domain.Location;
 import com.rentalhive.domain.Order;
 import com.rentalhive.dto.OrderDto;
 import com.rentalhive.dto.response.OrderResponseDto;
+import com.rentalhive.exception.QuantityExceededException;
 import com.rentalhive.repository.OrderRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +30,7 @@ public class OrderServiceTest {
     private OrderRepository orderRepository;
 
     @Test
-    public void testCreateOrder() {
+    public void testCreateOrder() throws QuantityExceededException {
         // Arrange
         List<EquipmentItem> orderEquipments = new ArrayList<>();
         orderEquipments.add(EquipmentItem.builder().build());

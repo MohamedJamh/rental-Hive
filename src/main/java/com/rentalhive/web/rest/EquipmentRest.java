@@ -2,11 +2,12 @@ package com.rentalhive.web.rest;
 
 import com.rentalhive.domain.Equipment;
 import com.rentalhive.domain.EquipmentFamily;
-import com.rentalhive.dto.request.RequestEquipmentDto;
+import com.rentalhive.dto.EquipmentDto;
 import com.rentalhive.dto.response.EquipmentResponseDTO;
 import com.rentalhive.mapper.EquipmentDtoMapper;
 import com.rentalhive.service.EquipmentService;
 import com.rentalhive.service.FamilyService;
+import com.rentalhive.utils.ValidationException;
 import lombok.RequiredArgsConstructor;
 import com.rentalhive.service.impl.EquipmentItemServiceImpl;
 import com.rentalhive.utils.Response;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/equipment")
@@ -35,10 +35,10 @@ public class EquipmentRest {
     }
 
     @PostMapping()
-    public ResponseEntity<Equipment> addEquipment(@Valid @RequestBody RequestEquipmentDto requestEquipmentDto){
+    public ResponseEntity<Equipment> addEquipment(@Valid @RequestBody EquipmentDto equipmentDto){
         try{
-            Equipment equipment = EquipmentDtoMapper.toEquipment(requestEquipmentDto);
-            EquipmentFamily family = familyService.findById(requestEquipmentDto.getEquipmentFamilyId()).orElseThrow();
+            Equipment equipment = EquipmentDtoMapper.toEquipment(equipmentDto);
+            EquipmentFamily family = familyService.findById(equipmentDto.getEquipmentFamilyId()).orElseThrow();
             equipment.setEquipmentFamily(family);
             return new ResponseEntity<>(equipmentService.save(equipment),HttpStatus.CREATED);
         }catch (Exception e){
@@ -47,20 +47,18 @@ public class EquipmentRest {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Equipment> updateEquipment(@Valid @PathVariable("id") long id, @RequestBody RequestEquipmentDto requestEquipmentDto){
-        try{
-            Optional<Equipment> eq = equipmentService.findById(id);
-            if(eq.isPresent()){
-                Equipment equipment = EquipmentDtoMapper.toEquipment(requestEquipmentDto);
-                equipment.setId(id);
-                EquipmentFamily family = familyService.findById(requestEquipmentDto.getEquipmentFamilyId()).orElseThrow();
-                equipment.setEquipmentFamily(family);
-                return new ResponseEntity<>(equipmentService.save(equipment),HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        }catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<Response<EquipmentDto>> updateEquipment(@Valid @RequestBody EquipmentDto equipmentDto, @PathVariable Long id){
+        Response<EquipmentDto> response = new Response<>();
+        Equipment equipment = EquipmentDtoMapper.toEquipment(equipmentDto);
+        equipment.setId(id);
+        try {
+            response.setResult(EquipmentDtoMapper.toDto(equipmentService.update(equipment)));
+            response.setMessage("Equipment has been updated successfully");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (ValidationException ex){
+            response.setMessage("Equipment has not been updated");
+            response.setErrors(List.of(ex.getCustomError()));
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -70,7 +68,7 @@ public class EquipmentRest {
             equipmentService.delete(id);
             String message = "Equipment a été supprimé avec success";
             return ResponseEntity.ok(message);
-        } catch (Exception e) {
+        }catch (Exception e) {
             String errorMessage = "Erreur lors de la suppression !";
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(errorMessage);

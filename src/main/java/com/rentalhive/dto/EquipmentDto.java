@@ -1,4 +1,4 @@
-package com.rentalhive.dto.request;
+package com.rentalhive.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,16 +13,14 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RequestEquipmentDto {
+public class EquipmentDto {
     private Long id;
-
-    @NotNull(message = "name cannot be null")
-    @NotBlank(message = "name cannot be blank")
+    @NotNull
+    @NotBlank(message = "Name is Invalid : blank name")
     private String name;
-
-    @Min(value = 0, message = "Quantity must be greater than or equal to {value}")
-    @NotNull(message = "quantity cannot be null")
+    @NotNull(message = "Equipment must not be null")
+    @Min(value = 0, message = "Quantity must be greater than or equal to 0")
     private Integer quantity;
-
+    @NotNull(message = "Equipment must not be null")
     private Long equipmentFamilyId;
 }

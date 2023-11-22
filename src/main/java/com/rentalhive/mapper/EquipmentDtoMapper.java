@@ -1,25 +1,24 @@
 package com.rentalhive.mapper;
 
 import com.rentalhive.domain.Equipment;
-import com.rentalhive.dto.request.RequestEquipmentDto;
-import com.rentalhive.dto.response.ResponseEquipmentDto;
+import com.rentalhive.dto.EquipmentDto;
 
 public class EquipmentDtoMapper {
 
     private EquipmentDtoMapper(){
     }
 
-    public static ResponseEquipmentDto toDto(Equipment equipment){
-        return ResponseEquipmentDto.builder()
+    public static EquipmentDto toDto(Equipment equipment){
+        return EquipmentDto.builder()
                 .id(equipment.getId())
                 .name(equipment.getName())
                 .quantity(equipment.getQuantity())
-                .equipmentFamily(equipment.getEquipmentFamily())
+                .equipmentFamilyId(equipment.getEquipmentFamily().getId())
                 .build();
     }
 
 
-    public static Equipment toEquipment(RequestEquipmentDto equipmentDto){
+    public static Equipment toEquipment(EquipmentDto equipmentDto){
 
         return Equipment.builder()
                 .id(equipmentDto.getId())
