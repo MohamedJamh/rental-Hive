@@ -1,7 +1,6 @@
 package com.rentalhive.repository;
 
 import com.rentalhive.domain.EquipmentItem;
-import com.rentalhive.domain.OrderEquipment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -29,4 +28,7 @@ public interface EquipmentItemRepository extends JpaRepository<EquipmentItem, Lo
             "WHERE (oe.order.rentStartDate IS NULL OR :endDate < oe.order.rentStartDate OR :startDate > oe.order.rentEndDate) " +
             "AND oe.order.id NOT IN (SELECT r.offer.order.id FROM Reservation r))")
     List<EquipmentItem> findAvailableEquipmentItemsByEquipmentId(Long id, LocalDateTime startDate, LocalDateTime endDate);
+
+    @Query("SELECT COUNT(ei) FROM EquipmentItem ei WHERE ei.equipment.id = :equipmentId")
+    int countByEquipmentId(Long equipmentId);
 }

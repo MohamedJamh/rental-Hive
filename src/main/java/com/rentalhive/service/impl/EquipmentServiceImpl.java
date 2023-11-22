@@ -22,7 +22,10 @@ public class EquipmentServiceImpl implements EquipmentService {
     }
 
     @Override
-    public Equipment save(Equipment equipment) {
+    public Equipment save(Equipment equipment) throws ValidationException {
+        Optional<Equipment> optionalEquipment = equipmentRepository.findByName(equipment.getName());
+        if(optionalEquipment.isPresent())
+            throw new ValidationException(new CustomError("name","Equipment name already exists"));
         return equipmentRepository.save(equipment);
     }
 
