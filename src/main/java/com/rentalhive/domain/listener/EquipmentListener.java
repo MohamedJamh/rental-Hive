@@ -28,13 +28,13 @@ public class EquipmentListener {
         equipmentItemService.saveAll(equipmentItems);
     }
 
-    @PostUpdate
+    /*@PostUpdate
     public void postUpdate(Equipment equipment){
         int numberOfEquipmentItems = equipmentItemService.countEquipmentItemsByEquipmentId(equipment.getId());
         int newQuantity = equipment.getQuantity() - numberOfEquipmentItems;
         List<EquipmentItem> equipmentItems = createEquipmentItems(newQuantity, equipment);
         equipmentItemService.saveAll(equipmentItems);
-    }
+    }*/
 
     private List<EquipmentItem> createEquipmentItems(int numberOfItems, Equipment equipment){
         List<EquipmentItem> equipmentItems = new ArrayList<>();
