@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Service
 public interface EquipmentService {
-    public Equipment save(Equipment equipment);
+    public Equipment save(Equipment equipment) throws ValidationException;
     public Equipment update(Equipment equipment) throws ValidationException;
     public List<Equipment> findAll();
     public void delete(Long id);

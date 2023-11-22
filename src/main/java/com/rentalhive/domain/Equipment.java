@@ -5,10 +5,6 @@ import com.rentalhive.domain.listener.EquipmentListener;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 @Setter
 @Getter
 @Entity
@@ -27,6 +23,5 @@ public class Equipment {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference
-    @JoinColumn(name = "equipment_family_id")
     private EquipmentFamily equipmentFamily;
 }
