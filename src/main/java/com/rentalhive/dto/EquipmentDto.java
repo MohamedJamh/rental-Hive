@@ -16,7 +16,6 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class EquipmentDto {
     private Long id;
-
     @NotNull
     @NotBlank(message = "Name is Invalid : blank name")
     private String name;
