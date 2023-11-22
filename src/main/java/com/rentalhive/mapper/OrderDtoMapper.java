@@ -3,9 +3,10 @@ package com.rentalhive.mapper;
 import com.rentalhive.domain.Order;
 import com.rentalhive.domain.OrderEquipment;
 import com.rentalhive.dto.OrderDto;
-import com.rentalhive.dto.request.EquipmentRequestDTO;
+import com.rentalhive.dto.response.OrderResponseDto;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class OrderDtoMapper {
 
@@ -14,14 +15,14 @@ public class OrderDtoMapper {
 
     public static OrderDto toDto(Order order) {
         return OrderDto.builder()
-                .end(order.getRentEndDate())
-                .start(order.getRentStartDate())
+                .endDate(order.getRentEndDate())
+                .startDate(order.getRentStartDate())
                 .build();
     }
     public static Order toEntity(OrderDto orderDto) {
         return Order.builder()
-                .rentStartDate(orderDto.getStart())
-                .rentEndDate(orderDto.getEnd())
+                .rentStartDate(orderDto.getStartDate())
+                .rentEndDate(orderDto.getEndDate())
                 .build();
     }
 }

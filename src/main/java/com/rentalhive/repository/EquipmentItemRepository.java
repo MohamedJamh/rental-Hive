@@ -1,11 +1,9 @@
 package com.rentalhive.repository;
 
 import com.rentalhive.domain.EquipmentItem;
-import com.rentalhive.domain.OrderEquipment;
-import com.rentalhive.dto.response.EquipmentResponseDTO;
+import com.rentalhive.enums.EquipmentItemStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -15,19 +13,30 @@ import java.util.List;
 public interface EquipmentItemRepository extends JpaRepository<EquipmentItem, Long> {
 
     @Query("SELECT ei FROM EquipmentItem ei " +
-            "WHERE ei.id NOT IN " +
+            "WHERE ei.status = :equipmentItemStatus AND ei.id NOT IN " +
             "(SELECT DISTINCT oe.equipmentItem.id FROM OrderEquipment oe " +
-            "WHERE (:endDate < oe.order.rentStartDate OR :startDate > oe.order.rentEndDate) " +
-            "AND oe.order.id NOT IN (SELECT r.offer.order.id FROM Reservation r))")
-    List<EquipmentItem> findAvailableEquipmentItems(
-            LocalDateTime startDate,
-            LocalDateTime endDate);
+            "WHERE oe.order.rentStartDate < :endDate AND oe.order.rentEndDate > :startDate " +
+            "AND oe.order.id IN (SELECT r.offer.order.id FROM Reservation r)) " +
+            "GROUP BY ei.equipment.id, ei.equipment.name, ei.equipment.equipmentFamily")
+    List<EquipmentItem> findByStatusAndAvailability(
+            EquipmentItemStatus equipmentItemStatus, LocalDateTime startDate, LocalDateTime endDate);
 
+    @Query("SELECT new com.rentalhive.dto.response.EquipmentResponseDTO(" +
+            "ei.equipment.id, ei.equipment.name, COUNT(ei.id), ei.equipment.equipmentFamily) " +
+            "FROM EquipmentItem ei " +
+            "WHERE ei.status = :equipmentItemStatus AND ei.id NOT IN " +
+            "(SELECT DISTINCT oe.equipmentItem.id FROM OrderEquipment oe " +
+            "WHERE oe.order.rentStartDate < :endDate AND oe.order.rentEndDate > :startDate " +
+            "AND oe.order.id IN (SELECT r.offer.order.id FROM Reservation r)) " +
+            "GROUP BY ei.equipment.id, ei.equipment.name, ei.equipment.equipmentFamily")
+    List<com.rentalhive.dto.response.EquipmentResponseDTO> findAvailableEquipmentResponseDTO(
+            EquipmentItemStatus equipmentItemStatus, LocalDateTime startDate, LocalDateTime endDate);
 
     @Query("SELECT ei FROM EquipmentItem ei " +
-            "WHERE ei.equipment.id = :id AND ei.id NOT IN " +
+            "WHERE ei.equipment.id = :id AND ei.status = :equipmentItemStatus AND ei.id NOT IN " +
             "(SELECT DISTINCT oe.equipmentItem.id FROM OrderEquipment oe " +
-            "WHERE (:endDate < oe.order.rentStartDate OR :startDate > oe.order.rentEndDate) " +
-            "AND oe.order.id NOT IN (SELECT r.offer.order.id FROM Reservation r))")
-    List<EquipmentItem> findAvailableEquipmentItemsByEquipmentId(Long id, LocalDateTime startDate, LocalDateTime endDate);
+            "WHERE oe.order.rentStartDate < :endDate AND oe.order.rentEndDate > :startDate " +
+            "AND oe.order.id IN (SELECT r.offer.order.id FROM Reservation r)) ")
+    List<EquipmentItem> findAvailableEquipmentItemsByEquipmentId(
+            EquipmentItemStatus equipmentItemStatus, Long id, LocalDateTime startDate, LocalDateTime endDate);
 }

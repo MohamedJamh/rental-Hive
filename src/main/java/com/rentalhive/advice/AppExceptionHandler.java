@@ -43,4 +43,17 @@ public class AppExceptionHandler {
         response.setErrors(errorList);
         return response;
     }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(RuntimeException.class)
+    private Response<Object> handleRunTime(RuntimeException ex) {
+        Response<Object> response = new Response<>();
+        List<CustomError> errorList = new ArrayList<>();
+        response.setMessage("Runtime exception");
+        errorList.add(CustomError.builder()
+                .field("runtime")
+                .message(ex.getMessage())
+                .build());
+        response.setErrors(errorList);
+        return response;
+    }
 }
