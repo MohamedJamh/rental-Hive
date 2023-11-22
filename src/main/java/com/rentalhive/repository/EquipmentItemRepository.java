@@ -39,4 +39,7 @@ public interface EquipmentItemRepository extends JpaRepository<EquipmentItem, Lo
             "AND oe.order.id IN (SELECT r.offer.order.id FROM Reservation r)) ")
     List<EquipmentItem> findAvailableEquipmentItemsByEquipmentId(
             EquipmentItemStatus equipmentItemStatus, Long id, LocalDateTime startDate, LocalDateTime endDate);
+
+    @Query("SELECT COUNT(ei) FROM EquipmentItem ei WHERE ei.equipment.id = :equipmentId")
+    int countByEquipmentId(Long equipmentId);
 }

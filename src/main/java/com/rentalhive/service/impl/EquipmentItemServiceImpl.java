@@ -36,4 +36,7 @@ public class EquipmentItemServiceImpl {
         return repository.saveAll(equipmentItems);
     }
 
+    public int countEquipmentItemsByEquipmentId(Long id) {
+        return repository.countByEquipmentId(id);
+    }
 }
