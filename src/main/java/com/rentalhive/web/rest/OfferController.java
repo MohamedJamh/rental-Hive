@@ -60,17 +60,32 @@ public class OfferController {
         }
     }
 
-    @PostMapping("/accept/{offerId}")
-    public ResponseEntity<Void> acceptOffer(@PathVariable Long offerId) {
-        // TODO: implement logics
-        // Call offerService.acceptOffer and return ResponseEntity with appropriate status code
-        throw new IllegalArgumentException("not implemented yet");
-    }
-
-    @PostMapping("/reject/{offerId}")
-    public ResponseEntity<Void> rejectOffer(@PathVariable Long offerId) {
-        // TODO: implement logics
-        // Call offerService.rejectOffer and return ResponseEntity with appropriate status code
-        throw new IllegalArgumentException("not implemented yet");
+    @PostMapping("/{id}/{action}")
+    public ResponseEntity<Response<OfferDto>> acceptOffer(@PathVariable Long id, @PathVariable OfferStatus action) {
+        Response<OfferDto> response = new Response<>();
+        try{
+            switch (action) {
+                case FULFILLED:
+                    offerService.acceptOffer(id);
+                    response.setMessage("Offer accepted successfully");
+                    break;
+                case NEGOTIATING:
+                    offerService.negotiatingOffer(id);
+                    response.setMessage("Offer set to negotiate successfully");
+                    break;
+                case REJECTED:
+                    offerService.rejectOffer(id);
+                    response.setMessage("Offer has been rejected");
+                    break;
+                default:
+                    response.setMessage("Invalid action");
+                    return ResponseEntity.badRequest().body(response);
+            }
+            return ResponseEntity.ok().body(response);
+        }catch (ValidationException e) {
+            response.setMessage("Offer has not been accepted");
+            response.setErrors(List.of(e.getCustomError()));
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 }

@@ -9,8 +9,8 @@ import java.util.List;
 public interface OfferService {
     List<Offer> getOffersByStatusOrStatus(OfferStatus status, OfferStatus status2);
     Offer createOffer(Offer offer) throws ValidationException;
-    void acceptOffer(Offer offer);
-    void rejectOffer(Offer offer);
+    Offer acceptOffer(Long id) throws ValidationException;
+    Offer rejectOffer(Long id) throws ValidationException;
 
-    void negotiatingOffer(Offer offer);
+    Offer negotiatingOffer(Long id) throws ValidationException;
 }
