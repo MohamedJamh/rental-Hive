@@ -32,8 +32,8 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseDto createOrder(OrderDto orderDto) throws QuantityExceededException {
         List<EquipmentRequestDTO> equipments = orderDto.getEquipments();
         checkIfCanReserveEquipments(orderDto);
-        LocalDateTime endDate = orderDto.getEnd();
-        LocalDateTime startDate = orderDto.getStart();
+        LocalDateTime endDate = orderDto.getEndDate();
+        LocalDateTime startDate = orderDto.getStartDate();
         final List<OrderEquipment> orderEquipment = new ArrayList<>();
         final List<EquipmentItem> equipmentItems = new ArrayList<>();
 
@@ -75,13 +75,18 @@ public class OrderServiceImpl implements OrderService {
         return OrderResponseDtoMapper.toDto(savedOrder);
     }
 
+    @Override
+    public List<Order> findAll() {
+        return orderRepository.findAll();
+    }
+
     private void checkIfCanReserveEquipments(OrderDto orderDto) {
         List<EquipmentRequestDTO> equipments = orderDto.getEquipments();
         if(equipments.isEmpty())
             throw new RuntimeException("No equipment is selected");
 
-        if(orderDto.getEnd()
-                .isBefore(orderDto.getStart()))
+        if(orderDto.getEndDate()
+                .isBefore(orderDto.getStartDate()))
             throw new RuntimeException("Date start should be before date end");
     }
 }
