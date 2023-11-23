@@ -1,6 +1,6 @@
 package com.rentalhive.service;
 
-import com.rentalhive.domain.Equipment;
+
 import com.rentalhive.domain.Location;
 import com.rentalhive.utils.ValidationException;
 import org.springframework.stereotype.Service;
