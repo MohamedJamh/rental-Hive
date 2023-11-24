@@ -1,6 +1,5 @@
 package com.rentalhive.dto;
 
-import com.rentalhive.domain.EquipmentFamily;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -5,5 +5,4 @@ public enum OfferStatus {
     REJECTED,
     NEGOTIATING,
     PENDING
-
 }

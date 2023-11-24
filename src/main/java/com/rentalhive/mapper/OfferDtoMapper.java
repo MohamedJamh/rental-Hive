@@ -10,13 +10,13 @@ public class OfferDtoMapper {
     private OfferDtoMapper() {
     }
 
-    public static OfferDto toDto(Offer order) {
+    public static OfferDto toDto(Offer offer) {
         return OfferDto.builder()
-                .id(order.getId())
-                .orderId(order.getOrder().getId())
-                .overallCost(order.getOverallCost())
-                .negotiable(order.getNegotiable())
-                .status(order.getStatus().name())
+                .id(offer.getId())
+                .orderId(offer.getOrder().getId())
+                .overallCost(offer.getOverallCost())
+                .negotiable(offer.getNegotiable())
+                .status(offer.getStatus().name())
                 .build();
     }
 

@@ -60,21 +60,27 @@ public class OfferController {
         }
     }
 
-    @PostMapping("/{id}/{action}")
-    public ResponseEntity<Response<OfferDto>> acceptOffer(@PathVariable Long id, @PathVariable OfferStatus action) {
+    @GetMapping("/{id}/{action}")
+    public ResponseEntity<Response<OfferDto>> actionOnService(@PathVariable Long id, @PathVariable String action) {
         Response<OfferDto> response = new Response<>();
         try{
             switch (action) {
-                case FULFILLED:
-                    offerService.acceptOffer(id);
+                case "FULFILLED":
+                    response.setResult(
+                            OfferDtoMapper.toDto(offerService.acceptOffer(id))
+                    );
                     response.setMessage("Offer accepted successfully");
                     break;
-                case NEGOTIATING:
-                    offerService.negotiatingOffer(id);
+                case "NEGOTIATING":
+                    response.setResult(
+                            OfferDtoMapper.toDto(offerService.negotiatingOffer(id))
+                    );
                     response.setMessage("Offer set to negotiate successfully");
                     break;
-                case REJECTED:
-                    offerService.rejectOffer(id);
+                case "REJECTED":
+                    response.setResult(
+                            OfferDtoMapper.toDto(offerService.rejectOffer(id))
+                    );
                     response.setMessage("Offer has been rejected");
                     break;
                 default:
@@ -83,7 +89,7 @@ public class OfferController {
             }
             return ResponseEntity.ok().body(response);
         }catch (ValidationException e) {
-            response.setMessage("Offer has not been accepted");
+            response.setMessage("Action offer has not been submitted");
             response.setErrors(List.of(e.getCustomError()));
             return ResponseEntity.badRequest().body(response);
         }
