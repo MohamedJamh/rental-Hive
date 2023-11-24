@@ -5,6 +5,7 @@ import com.rentalhive.domain.EquipmentFamily;
 import com.rentalhive.dto.EquipmentDto;
 
 public class EquipmentDtoMapper {
+
     private EquipmentDtoMapper(){
     }
 
@@ -17,7 +18,9 @@ public class EquipmentDtoMapper {
                 .build();
     }
 
+
     public static Equipment toEquipment(EquipmentDto equipmentDto){
+
         return Equipment.builder()
                 .id(equipmentDto.getId())
                 .name(equipmentDto.getName())
