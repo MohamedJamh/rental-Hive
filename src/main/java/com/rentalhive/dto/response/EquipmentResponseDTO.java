@@ -15,6 +15,6 @@ import javax.validation.constraints.NotNull;
 public class EquipmentResponseDTO {
     private Long id;
     private String name;
-    private Integer quantityAvailable;
+    private Long quantityAvailable;
     private EquipmentFamily equipmentFamily;
 }

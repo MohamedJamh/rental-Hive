@@ -21,7 +21,7 @@ public class Order {
     private LocalDateTime rentEndDate;
     @OneToOne
     private Location constructLocation;
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<OrderEquipment> orderEquipments;
     @ManyToOne
     private User user;

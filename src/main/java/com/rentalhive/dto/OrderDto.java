@@ -23,10 +23,10 @@ public class OrderDto {
     List<EquipmentRequestDTO> equipments;
     @DateTimeFormat
     @NotNull
-    LocalDateTime start;
+    LocalDateTime startDate;
     @DateTimeFormat
     @NotNull
-    LocalDateTime end;
+    LocalDateTime endDate;
     @DateTimeFormat
     @Nullable
     Location location;

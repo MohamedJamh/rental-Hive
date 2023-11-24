@@ -16,6 +16,17 @@ public class OrderController {
 
     private final OrderService orderService;
 
+    @GetMapping
+    public ResponseEntity<?> finAll() {
+        return ResponseEntity.ok().body(
+                Response.builder()
+                        .message("fetching all orders")
+                        .result(orderService.findAll())
+                        .build()
+        );
+    }
+
+
     @PostMapping
     public ResponseEntity<Response<OrderResponseDto>> createOrder(@RequestBody OrderDto orderRequest) throws QuantityExceededException {
         OrderResponseDto orderSaved = orderService.createOrder(orderRequest);
