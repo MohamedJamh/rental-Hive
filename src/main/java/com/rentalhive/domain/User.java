@@ -1,5 +1,7 @@
 package com.rentalhive.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,9 +26,12 @@ public class User {
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime verifiedAt;
     @ManyToMany
+    @JsonManagedReference
     private List<Role> roles;
     @OneToOne
+    @JsonBackReference
     private Organization organization;
     @OneToMany
+    @JsonBackReference
     private List<Order> orders;
 }
