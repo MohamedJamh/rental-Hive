@@ -1,7 +1,6 @@
 package com.rentalhive.dto.response;
 
 import com.rentalhive.domain.Location;
-import com.rentalhive.dto.request.EquipmentRequestDTO;
 import com.sun.istack.NotNull;
 import com.sun.istack.Nullable;
 import lombok.AllArgsConstructor;
@@ -18,13 +17,18 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class OrderResponseDto {
+
     @DateTimeFormat
     @NotNull
     LocalDateTime start;
+
     @DateTimeFormat
     @NotNull
     LocalDateTime end;
+
     @DateTimeFormat
     @Nullable
     Location location;
+
+    List<OrderEquipmentResponseDto> orderEquipment;
 }

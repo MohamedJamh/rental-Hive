@@ -23,7 +23,7 @@ public class EquipmentItem {
     private EquipmentItemStatus status = EquipmentItemStatus.AVAILABLE;
     @OneToOne
     private Equipment equipment;
-    @OneToMany(mappedBy = "orderEquipmentId.equipmentItem", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "equipmentItem", fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<OrderEquipment> orderEquipments;
 }
