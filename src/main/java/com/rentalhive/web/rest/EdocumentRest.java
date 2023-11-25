@@ -2,7 +2,6 @@ package com.rentalhive.web.rest;
 
 import com.rentalhive.domain.Edocument;
 import com.rentalhive.dto.EdocumentDto;
-import com.rentalhive.dto.RoleDto;
 import com.rentalhive.mapper.EdocumentMapper;
 import com.rentalhive.service.EdocumentService;
 import com.rentalhive.utils.Response;
@@ -54,5 +53,31 @@ public class EdocumentRest {
             edocumentDtos.add(edocumentDto);
         }
         return new ResponseEntity<>(edocumentDtos,HttpStatus.OK);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<EdocumentDto> updateEdocument(@PathVariable("id") long id, @RequestBody EdocumentDto edocumentDto)
+    {
+        try {
+            return new ResponseEntity<>(EdocumentMapper.toDto(edocumentService.update(EdocumentMapper.toEdocument(edocumentDto), id)),HttpStatus.OK);
+        }catch (ValidationException e)
+        {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteEdocument(@PathVariable("id") long id)
+    {
+        try {
+            edocumentService.deleteDocument(id);
+            return new ResponseEntity<>("s",HttpStatus.OK);
+        }catch (Exception e)
+        {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
     }
 }

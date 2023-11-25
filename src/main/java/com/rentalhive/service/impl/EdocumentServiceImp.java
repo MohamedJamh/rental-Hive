@@ -12,8 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.apache.tomcat.util.codec.binary.Base64.isBase64;
 
@@ -55,6 +56,25 @@ public class EdocumentServiceImp implements EdocumentService {
         return edocumentRepository.findAll();
     }
 
+    @Override
+    public Edocument update(Edocument edocument, Long id) throws ValidationException {
+        Optional<Edocument> existingEdocument = edocumentRepository.findById(id);
+        if (existingEdocument.isPresent()) {
+            edocument.setId(id);
+            return save(edocument);
+        }
+        throw new ValidationException(new CustomError("name", "Entity not found"));
+    }
+
+    @Override
+    public void deleteDocument(long id) {
+        Optional<Edocument> edocument = edocumentRepository.findById(id);
+        if (edocument.isPresent())
+            edocumentRepository.delete(edocument.get());
+        else
+            throw new NoSuchElementException("Role not found with id: " + id);
+    }
+
     private Edocument validateAndSave(Edocument edocument, JpaRepository<?, Long> repository) throws ValidationException {
         if (repository.findById(edocument.getModel_id()).isPresent()) {
             return edocumentRepository.save(edocument);
@@ -66,4 +86,5 @@ public class EdocumentServiceImp implements EdocumentService {
     private boolean isBase64Encoded(String str) {
         return isBase64(str);
     }
+
 }
