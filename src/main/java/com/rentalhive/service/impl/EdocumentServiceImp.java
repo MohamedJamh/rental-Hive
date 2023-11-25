@@ -1,6 +1,7 @@
 package com.rentalhive.service.impl;
 
 import com.rentalhive.domain.Edocument;
+import com.rentalhive.dto.EdocumentDto;
 import com.rentalhive.repository.ContractRepository;
 import com.rentalhive.repository.EdocumentRepository;
 import com.rentalhive.repository.OrganizationRepository;
@@ -11,6 +12,7 @@ import com.rentalhive.utils.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.NoSuchElementException;
