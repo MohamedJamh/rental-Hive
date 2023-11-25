@@ -1,10 +1,7 @@
 package com.rentalhive.web.rest;
 
-import com.rentalhive.domain.Equipment;
 import com.rentalhive.domain.Location;
-import com.rentalhive.dto.EquipmentDto;
 import com.rentalhive.dto.LocationDto;
-import com.rentalhive.mapper.EquipmentDtoMapper;
 import com.rentalhive.mapper.LocationDtoMapper;
 import com.rentalhive.service.LocationService;
 import com.rentalhive.utils.Response;
@@ -34,7 +31,7 @@ public class LocationController {
     }
 
     @PostMapping
-    public ResponseEntity<Response<LocationDto>> addEquipment(@Valid @RequestBody LocationDto locationDto){
+    public ResponseEntity<Response<LocationDto>> addLocation(@Valid @RequestBody LocationDto locationDto){
         Response<LocationDto> response = new Response<>();
         Location location = LocationDtoMapper.toEntity(locationDto);
         try {

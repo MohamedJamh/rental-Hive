@@ -52,6 +52,8 @@ public class OfferServiceImpl implements OfferService {
         if( ! List.of(OfferStatus.PENDING, OfferStatus.NEGOTIATING).contains(offer.getStatus()))
             invalidAction();
         offer.setStatus(OfferStatus.FULFILLED);
+        //change equipment items status to borrowed
+        //add reservation
         return offerRepository.save(offer);
     }
 
