@@ -88,11 +88,11 @@ public class EdocumentRest {
             throw new ValidationException(new CustomError("edocumentDto", "must not be null"));
         }
 
-        if (edocumentDto.getModel_id() == null) {
+        if (edocumentDto.getModelId() == null) {
             throw new ValidationException(new CustomError("model_id", "must not be null"));
         }
 
-        if (StringUtils.isBlank(edocumentDto.getModel_name())) {
+        if (StringUtils.isBlank(edocumentDto.getModelName())) {
             throw new ValidationException(new CustomError("model_name", "must not be blank"));
         }
 
