@@ -32,11 +32,11 @@ public class RoleController {
         Role role = RoleDtoMapper.toRole(roleDto);
         try {
             response.setResult(RoleDtoMapper.toDto(roleService.save(role)));
-            response.setMessage("Equipment family has been added successfully");
+            response.setMessage("Role has been added successfully");
             return new ResponseEntity<>(response,HttpStatus.CREATED);
         }catch (ValidationException e)
         {
-            response.setMessage("Equipment family has not been added");
+            response.setMessage("Role has not been added");
             response.setErrors(List.of(e.getCustomError()));
             return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
         }

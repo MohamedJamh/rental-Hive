@@ -18,9 +18,7 @@ public class Offer {
     private Double overallCost;
     @Enumerated(EnumType.STRING)
     private OfferStatus status;
+    private Boolean negotiable;
     @ManyToOne
     private Order order;
-    //@OneToOne
-    //private Reservation reservation;
-
 }
