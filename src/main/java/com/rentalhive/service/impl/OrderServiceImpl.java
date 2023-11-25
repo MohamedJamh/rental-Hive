@@ -1,7 +1,6 @@
 package com.rentalhive.service.impl;
 
 import com.rentalhive.domain.*;
-import com.rentalhive.domain.embedded.OrderEquipmentId;
 import com.rentalhive.dto.OrderDto;
 import com.rentalhive.dto.request.EquipmentRequestDTO;
 import com.rentalhive.dto.response.OrderResponseDto;
@@ -53,12 +52,6 @@ public class OrderServiceImpl implements OrderService {
 
         equipmentItems.forEach(equipmentItem ->
                 orderEquipment.add(OrderEquipment.builder()
-                                .orderEquipmentId(
-                                        OrderEquipmentId.builder()
-                                                .equipmentItem(equipmentItem)
-                                                .order(order)
-                                                .build()
-                                )
                         .equipmentItem(equipmentItem)
                         .order(order)
                         .build()));
