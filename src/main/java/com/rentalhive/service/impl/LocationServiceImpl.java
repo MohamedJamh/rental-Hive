@@ -19,13 +19,11 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public Location save(Location location) throws ValidationException {
         Optional<Location> optionalLocationName = locationRepository.findByName(location.getName());
-        Optional<Location> optionalLocationLatLong = locationRepository.findByLatitudeAndLongitude(location.getLatitude(), location.getLongitude());
-
         if(optionalLocationName.isPresent())
             throw new ValidationException(new CustomError("name","Location name already exists"));
+        Optional<Location> optionalLocationLatLong = locationRepository.findByLatitudeAndLongitude(location.getLatitude(), location.getLongitude());
         if(optionalLocationLatLong.isPresent())
             throw new ValidationException(new CustomError("latitude, longitude","Location latitude and longitude are already exists"));
-
         return locationRepository.save(location);
     }
 
@@ -34,11 +32,9 @@ public class LocationServiceImpl implements LocationService {
         Optional<Location> optionalLocationName = locationRepository.findByNameAndIdNot(location.getName(), location.getId());
         if(optionalLocationName.isPresent())
             throw new ValidationException(new CustomError("name","Location name already exists"));
-
         Optional<Location> optionalLocationLatLong = locationRepository.findByLatitudeAndLongitudeAndIdNot(location.getLatitude(), location.getLongitude(), location.getId());
         if(optionalLocationLatLong.isPresent())
             throw new ValidationException(new CustomError("latitude, longitude","Location latitude and longitude are already exists"));
-
         return locationRepository.save(location);
     }
 

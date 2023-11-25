@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
 import java.util.List;
 
 import static org.apache.tomcat.util.codec.binary.Base64.isBase64;
@@ -35,15 +34,15 @@ public class EdocumentServiceImp implements EdocumentService {
 
     @Override
     public Edocument save(Edocument edocument) throws ValidationException {
-        if (edocument.getModel_id() == null || !isBase64Encoded(edocument.getClasspath())) {
+        if (edocument.getModelId() == null || !isBase64Encoded(edocument.getClasspath())) {
             throw new ValidationException(new CustomError("name", "Invalid id or path name"));
         }
 
-        if ("USER".equals(edocument.getModel_name())) {
+        if ("USER".equals(edocument.getModelName())) {
             return validateAndSave(edocument, userRepository);
-        } else if ("CONTRACT".equals(edocument.getModel_name())) {
+        } else if ("CONTRACT".equals(edocument.getModelName())) {
             return validateAndSave(edocument, contractRepository);
-        } else if ("ORGANIZATION".equals(edocument.getModel_name())) {
+        } else if ("ORGANIZATION".equals(edocument.getModelName())) {
             return validateAndSave(edocument, organizationRepository);
         } else {
             throw new ValidationException(new CustomError("name", "Invalid model name"));
@@ -56,7 +55,7 @@ public class EdocumentServiceImp implements EdocumentService {
     }
 
     private Edocument validateAndSave(Edocument edocument, JpaRepository<?, Long> repository) throws ValidationException {
-        if (repository.findById(edocument.getModel_id()).isPresent()) {
+        if (repository.findById(edocument.getModelId()).isPresent()) {
             return edocumentRepository.save(edocument);
         } else {
             throw new ValidationException(new CustomError("name", "Entity not found"));

@@ -14,8 +14,8 @@ public class Edocument {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String model_name;
-    private Long model_id;
+    private String modelName;
+    private Long modelId;
     @Column(columnDefinition = "text")
     private String classpath;
 }

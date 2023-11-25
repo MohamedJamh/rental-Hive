@@ -13,12 +13,12 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Builder
 public class EdocumentDto {
-    @NotBlank
-    @NotNull
-    private String model_name;
-    @NotNull
-    private Long model_id;
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "Name cannot be blank")
+    @NotNull(message = "Name cannot be null")
+    private String modelName;
+    @NotNull(message = "Model type reference cannot be null")
+    private Long modelId;
+    @NotNull(message = "image cannot be null")
+    @NotBlank(message = "image cannot be blank")
     private String classpath;
 }
