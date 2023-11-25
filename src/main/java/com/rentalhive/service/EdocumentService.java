@@ -10,4 +10,6 @@ import java.util.List;
 public interface EdocumentService {
     public Edocument save(Edocument edocument) throws ValidationException;
     public List<Edocument> getAllEdocument();
+    public Edocument update(Edocument edocument, Long id) throws ValidationException;
+    public void deleteDocument(long id);
 }
