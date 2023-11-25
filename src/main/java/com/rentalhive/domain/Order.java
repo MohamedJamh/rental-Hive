@@ -3,7 +3,6 @@ package com.rentalhive.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,6 +21,8 @@ public class Order {
     private LocalDateTime rentEndDate;
     @OneToOne
     private Location constructLocation;
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<OrderEquipment> orderEquipments;
+    @ManyToOne
+    private User user;
 }

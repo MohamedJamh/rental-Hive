@@ -1,5 +1,6 @@
 package com.rentalhive.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.rentalhive.enums.EquipmentItemStatus;
 import lombok.*;
 
@@ -22,6 +23,7 @@ public class EquipmentItem {
     private EquipmentItemStatus status = EquipmentItemStatus.AVAILABLE;
     @OneToOne
     private Equipment equipment;
-    @OneToMany(mappedBy = "equipmentItem")
+    @OneToMany(mappedBy = "orderEquipmentId.equipmentItem", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<OrderEquipment> orderEquipments;
 }
