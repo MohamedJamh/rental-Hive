@@ -32,13 +32,12 @@ public class OfferDtoMapper {
 
         return Offer.builder()
                 .negotiable(offerDto.getNegotiable())
-                .overallCost(offerDto.getOverallCost())
                 .status(OfferStatus.valueOf(offerDto.getStatus()))
                 .order(
                         Order.builder()
-                                .id(offerDto.getOrderId())
-                                .orderEquipments(orderEquipments)
-                                .build()
+                            .id(offerDto.getOrderId())
+                            .orderEquipments(orderEquipments)
+                            .build()
                 )
                 .build();
     }
