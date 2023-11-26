@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
@@ -28,7 +30,7 @@ public class OrderController {
 
 
     @PostMapping
-    public ResponseEntity<Response<OrderResponseDto>> createOrder(@RequestBody OrderDto orderRequest) throws QuantityExceededException {
+    public ResponseEntity<Response<OrderResponseDto>> createOrder(@Valid @RequestBody OrderDto orderRequest) throws QuantityExceededException {
         OrderResponseDto orderSaved = orderService.createOrder(orderRequest);
         Response<OrderResponseDto> body = new Response<>();
         body.setResult(orderSaved);
