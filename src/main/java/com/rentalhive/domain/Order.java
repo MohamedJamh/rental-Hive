@@ -1,5 +1,7 @@
 package com.rentalhive.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,7 +24,9 @@ public class Order {
     @OneToOne
     private Location constructLocation;
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<OrderEquipment> orderEquipments;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     private User user;
 }

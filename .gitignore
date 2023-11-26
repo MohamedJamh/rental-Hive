@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+/myLogs.log
+
+/src/main/resources/application.yml
+/.jpb
