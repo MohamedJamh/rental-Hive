@@ -1,32 +1,34 @@
 package com.rentalhive.service.impl;
 
 import com.rentalhive.domain.Equipment;
+import com.rentalhive.domain.EquipmentFamily;
 import com.rentalhive.repository.EquipmentRepository;
+import com.rentalhive.repository.FamilyRepository;
 import com.rentalhive.service.EquipmentService;
 import com.rentalhive.utils.CustomError;
 import com.rentalhive.utils.ValidationException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class EquipmentServiceImpl implements EquipmentService {
 
     private final EquipmentRepository equipmentRepository;
+    private final FamilyRepository familyRepository;
 
-    @Autowired
-    public EquipmentServiceImpl(EquipmentRepository equipmentRepository) {
-        this.equipmentRepository = equipmentRepository;
-    }
 
     @Override
     public Equipment save(Equipment equipment) throws ValidationException {
-        // TODO: 2021-05-11  add validation for equipment family
+        Optional<EquipmentFamily> optionalEquipmentFamily = familyRepository.findById(equipment.getEquipmentFamily().getId());
+        if(optionalEquipmentFamily.isEmpty())
+            throw new ValidationException(new CustomError("Equipment family","Equipment family does not exist"));
         Optional<Equipment> optionalEquipment = equipmentRepository.findByName(equipment.getName());
         if(optionalEquipment.isPresent())
-            throw new ValidationException(new CustomError("name","Equipment name already exists"));
+            throw new ValidationException(new CustomError("Equipment name","Equipment name already exists"));
         return equipmentRepository.save(equipment);
     }
 

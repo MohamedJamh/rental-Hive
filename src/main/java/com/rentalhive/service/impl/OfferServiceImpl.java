@@ -1,16 +1,18 @@
 package com.rentalhive.service.impl;
 
 import com.rentalhive.domain.Offer;
+import com.rentalhive.domain.OrderEquipment;
 import com.rentalhive.domain.User;
 import com.rentalhive.enums.OfferStatus;
 import com.rentalhive.repository.OfferRepository;
-import com.rentalhive.repository.OrderRepository;
+import com.rentalhive.repository.OrderEquipmentRepository;
 import com.rentalhive.service.OfferService;
 import com.rentalhive.utils.CustomError;
 import com.rentalhive.utils.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +22,7 @@ import java.util.Optional;
 public class OfferServiceImpl implements OfferService {
 
     private final OfferRepository offerRepository;
-    private final OrderRepository orderRepository;
+    private final OrderEquipmentRepository orderEquipmentRepository;
     private final User userConnected;
 
     public Offer getOfferIfExist(Long id) throws ValidationException {
@@ -40,8 +42,19 @@ public class OfferServiceImpl implements OfferService {
     public Offer createOffer(Offer offer) throws ValidationException {
         if(offerRepository.getByOrderIdAndAndStatus(offer.getOrder().getId(),OfferStatus.PENDING).isPresent())
             throw new ValidationException(
-                    new CustomError("Order reference","There is already a pending offer for this order")
+                new CustomError("Order reference","There is already a pending offer for this order")
             );
+        List<OrderEquipment> orderEquipments = offer.getOrder().getOrderEquipments();
+        List<Long> submittedOrderEquipmentsIds = orderEquipments.stream().map(OrderEquipment::getId).toList();
+        List<Long> orderEquipmentsIds = orderEquipmentRepository.getOrderEquipmentByOrderId(offer.getOrder().getId()).stream().map(OrderEquipment::getId).toList();
+        Boolean orderEquipmentMatches = new HashSet<>(submittedOrderEquipmentsIds).containsAll(orderEquipmentsIds);
+        if(Boolean.FALSE.equals( orderEquipmentMatches))
+            throw new ValidationException(
+                new CustomError("Order equipment reference","Order equipment does not match")
+            );
+        Double overallCost = orderEquipments.stream().mapToDouble(OrderEquipment::getRentPrice).sum();
+        orderEquipmentRepository.saveAll(orderEquipments);
+        offer.setOverallCost(overallCost);
         return offerRepository.save(offer);
     }
 
@@ -52,8 +65,8 @@ public class OfferServiceImpl implements OfferService {
         if( ! List.of(OfferStatus.PENDING, OfferStatus.NEGOTIATING).contains(offer.getStatus()))
             invalidAction();
         offer.setStatus(OfferStatus.FULFILLED);
-        //change equipment items status to borrowed
-        //add reservation
+        //todo:change equipment items status to borrowed
+        //todo:add reservation
         return offerRepository.save(offer);
     }
 
