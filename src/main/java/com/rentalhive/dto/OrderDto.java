@@ -2,14 +2,15 @@ package com.rentalhive.dto;
 
 import com.rentalhive.domain.Location;
 import com.rentalhive.dto.request.EquipmentRequestDTO;
-import com.sun.istack.NotNull;
-import com.sun.istack.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,15 +20,15 @@ import java.util.List;
 @Builder
 public class OrderDto {
 
-    @NotNull
+    @Valid
+    @NotNull(message = "equipment cannot be null")
     List<EquipmentRequestDTO> equipments;
     @DateTimeFormat
-    @NotNull
+    @NotNull(message = "startDate cannot be null")
     LocalDateTime startDate;
     @DateTimeFormat
-    @NotNull
+    @NotNull(message = "endDate cannot be null")
     LocalDateTime endDate;
-    @DateTimeFormat
     @Nullable
     Location location;
 }

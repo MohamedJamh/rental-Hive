@@ -8,7 +8,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,19 +38,6 @@ public class AppExceptionHandler {
         response.setMessage("Quantity reservation exception");
         errorList.add(CustomError.builder()
                 .field("quantityReserved")
-                .message(ex.getMessage())
-                .build());
-        response.setErrors(errorList);
-        return response;
-    }
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(RuntimeException.class)
-    private Response<Object> handleRunTime(RuntimeException ex) {
-        Response<Object> response = new Response<>();
-        List<CustomError> errorList = new ArrayList<>();
-        response.setMessage("Runtime exception");
-        errorList.add(CustomError.builder()
-                .field("runtime")
                 .message(ex.getMessage())
                 .build());
         response.setErrors(errorList);

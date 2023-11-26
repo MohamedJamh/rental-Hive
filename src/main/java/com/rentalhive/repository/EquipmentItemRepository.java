@@ -12,15 +12,6 @@ import java.util.List;
 @Repository
 public interface EquipmentItemRepository extends JpaRepository<EquipmentItem, Long> {
 
-    @Query("SELECT ei FROM EquipmentItem ei " +
-            "WHERE ei.status = :equipmentItemStatus AND ei.id NOT IN " +
-            "(SELECT DISTINCT oe.equipmentItem.id FROM OrderEquipment oe " +
-            "WHERE oe.order.rentStartDate < :endDate AND oe.order.rentEndDate > :startDate " +
-            "AND oe.order.id IN (SELECT r.offer.order.id FROM Reservation r)) " +
-            "GROUP BY ei.equipment.id, ei.equipment.name, ei.equipment.equipmentFamily")
-    List<EquipmentItem> findByStatusAndAvailability(
-            EquipmentItemStatus equipmentItemStatus, LocalDateTime startDate, LocalDateTime endDate);
-
     @Query("SELECT new com.rentalhive.dto.response.EquipmentResponseDTO(" +
             "ei.equipment.id, ei.equipment.name, COUNT(ei.id), ei.equipment.equipmentFamily) " +
             "FROM EquipmentItem ei " +

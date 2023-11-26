@@ -12,9 +12,9 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Builder
 public class EquipmentRequestDTO {
-    @NotNull
+    @NotNull(message = "Equipment id is required")
     private Long id;
     private String name;
-    @NotNull
+    @NotNull(message = "Quantity reserved is required")
     private Integer quantityReserved;
 }
