@@ -33,4 +33,6 @@ public interface EquipmentItemRepository extends JpaRepository<EquipmentItem, Lo
 
     @Query("SELECT COUNT(ei) FROM EquipmentItem ei WHERE ei.equipment.id = :equipmentId")
     int countByEquipmentId(Long equipmentId);
+    @Query("update EquipmentItem ei set ei.status = :status where ei.id = :id")
+    void updateStatusById(Long id, EquipmentItemStatus status);
 }
