@@ -1,33 +1,63 @@
 package com.rentalhive.service.impl;
 
 import com.rentalhive.domain.Equipment;
+import com.rentalhive.domain.EquipmentItem;
+import com.rentalhive.enums.EquipmentItemStatus;
 import com.rentalhive.repository.EquipmentRepository;
+import com.rentalhive.service.EquipmentItemService;
 import com.rentalhive.service.EquipmentService;
 import com.rentalhive.utils.CustomError;
 import com.rentalhive.utils.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-@Component
+@Service
 public class EquipmentServiceImpl implements EquipmentService {
 
     private final EquipmentRepository equipmentRepository;
+    private final EquipmentItemService equipmentItemService;
 
     @Autowired
-    public EquipmentServiceImpl(EquipmentRepository equipmentRepository) {
+    public EquipmentServiceImpl(EquipmentRepository equipmentRepository,
+                                EquipmentItemService equipmentItemService) {
         this.equipmentRepository = equipmentRepository;
+        this.equipmentItemService = equipmentItemService;
     }
 
     @Override
+    @Transactional
     public Equipment save(Equipment equipment) throws ValidationException {
         // TODO: 2021-05-11  add validation for equipment family
         Optional<Equipment> optionalEquipment = equipmentRepository.findByName(equipment.getName());
         if(optionalEquipment.isPresent())
             throw new ValidationException(new CustomError("name","Equipment name already exists"));
-        return equipmentRepository.save(equipment);
+        equipment = equipmentRepository.save(equipment);
+
+        List<EquipmentItem> equipmentItems = createEquipmentItems(equipment.getQuantity(), equipment);
+        equipmentItemService.saveAll(equipmentItems);
+
+        return equipment;
+
+    }
+
+    private List<EquipmentItem> createEquipmentItems(int numberOfItems, Equipment equipment){
+        List<EquipmentItem> equipmentItems = new ArrayList<>();
+        for (int i = 1; i <= numberOfItems; i++) {
+            equipmentItems.add(
+                    EquipmentItem.builder()
+                            .equipment(equipment)
+                            .status(EquipmentItemStatus.AVAILABLE)
+                            .reference(UUID.randomUUID().toString())
+                            .build()
+            );
+        }
+        return equipmentItems;
     }
 
     @Override

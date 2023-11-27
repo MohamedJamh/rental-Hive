@@ -29,4 +29,8 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     private User user;
+
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Offer> offer;
 }

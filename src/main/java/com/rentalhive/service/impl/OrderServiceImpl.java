@@ -30,7 +30,10 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderResponseDto createOrder(OrderDto orderDto) throws QuantityExceededException {
         List<EquipmentRequestDTO> equipments = orderDto.getEquipments();
+
+        checkIfClientDoesNotHaveOrder();
         checkIfCanReserveEquipments(orderDto);
+
         LocalDateTime endDate = orderDto.getEndDate();
         LocalDateTime startDate = orderDto.getStartDate();
         final List<OrderEquipment> orderEquipment = new ArrayList<>();
@@ -66,6 +69,14 @@ public class OrderServiceImpl implements OrderService {
         Order savedOrder = orderRepository.save(order);
 
         return OrderResponseDtoMapper.toDto(savedOrder);
+    }
+
+    private void checkIfClientDoesNotHaveOrder() {
+        boolean isUserHasOrderPending =  orderRepository.isUserHasOrderOfferPending(userConnected);
+
+        if(isUserHasOrderPending) {
+                throw new IllegalArgumentException("You have already an order pending");
+        }
     }
 
     @Override
