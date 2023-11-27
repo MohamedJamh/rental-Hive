@@ -4,6 +4,7 @@ import com.rentalhive.domain.EquipmentItem;
 import com.rentalhive.dto.response.EquipmentResponseDTO;
 import com.rentalhive.enums.EquipmentItemStatus;
 import com.rentalhive.repository.EquipmentItemRepository;
+import com.rentalhive.service.EquipmentItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class EquipmentItemServiceImpl implements com.rentalhive.service.EquipmentItemService {
+public class EquipmentItemServiceImpl implements EquipmentItemService {
 
     private final EquipmentItemRepository repository;
 

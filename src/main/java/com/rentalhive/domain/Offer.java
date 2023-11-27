@@ -1,5 +1,6 @@
 package com.rentalhive.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.rentalhive.enums.OfferStatus;
 import lombok.*;
 
@@ -19,6 +20,8 @@ public class Offer {
     @Enumerated(EnumType.STRING)
     private OfferStatus status;
     private Boolean negotiable;
+
     @ManyToOne
+    @JsonBackReference
     private Order order;
 }
