@@ -2,7 +2,6 @@ package com.rentalhive.web.rest;
 
 import com.rentalhive.dto.OrderDto;
 import com.rentalhive.dto.response.OrderResponseDto;
-import com.rentalhive.exception.QuantityExceededException;
 import com.rentalhive.service.OrderService;
 import com.rentalhive.utils.Response;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,7 @@ public class OrderController {
 
 
     @PostMapping
-    public ResponseEntity<Response<OrderResponseDto>> createOrder(@Valid @RequestBody OrderDto orderRequest) throws QuantityExceededException {
+    public ResponseEntity<Response<OrderResponseDto>> createOrder(@Valid @RequestBody OrderDto orderRequest) throws Exception {
         OrderResponseDto orderSaved = orderService.createOrder(orderRequest);
         Response<OrderResponseDto> body = new Response<>();
         body.setResult(orderSaved);

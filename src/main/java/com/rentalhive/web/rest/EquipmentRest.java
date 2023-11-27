@@ -3,6 +3,7 @@ package com.rentalhive.web.rest;
 import com.rentalhive.domain.Equipment;
 import com.rentalhive.dto.EquipmentDto;
 import com.rentalhive.dto.response.EquipmentResponseDTO;
+import com.rentalhive.exception.OrderDateException;
 import com.rentalhive.mapper.EquipmentDtoMapper;
 import com.rentalhive.service.EquipmentService;
 import com.rentalhive.service.impl.EquipmentItemServiceImpl;
@@ -96,7 +97,7 @@ public class EquipmentRest {
     public ResponseEntity<Response<List<EquipmentResponseDTO>>> getEquipmentAvailable(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end
-    ) {
+    ) throws OrderDateException {
         Response<List<EquipmentResponseDTO>> response = new Response<>();
         response.setMessage("Retrieve equipment is successful");
         response.setResult(equipmentItemService.findAvailableEquipments(start, end));
