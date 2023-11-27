@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/offer")
 @RequiredArgsConstructor
-public class OfferController {
+public class OfferRest {
     private final OfferService offerService;
     @GetMapping
     public ResponseEntity<Response<List<OfferDto>>> getCurrentOffers(){

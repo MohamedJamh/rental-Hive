@@ -1,6 +1,6 @@
 package com.rentalhive;
 
-import com.rentalhive.web.rest.RoleController;
+import com.rentalhive.web.rest.RoleRest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@WebMvcTest(controllers = RoleController.class)
+@WebMvcTest(controllers = RoleRest.class)
 @ExtendWith(SpringExtension.class)
 class TestRole {
     @Autowired

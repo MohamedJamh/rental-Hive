@@ -14,7 +14,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
-public class OrderController {
+public class OrderRest {
 
     private final OrderService orderService;
 
