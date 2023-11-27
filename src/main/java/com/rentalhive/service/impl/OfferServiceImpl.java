@@ -1,11 +1,12 @@
 package com.rentalhive.service.impl;
 
-import com.rentalhive.domain.Offer;
-import com.rentalhive.domain.OrderEquipment;
-import com.rentalhive.domain.User;
+import com.rentalhive.domain.*;
+import com.rentalhive.enums.EquipmentItemStatus;
 import com.rentalhive.enums.OfferStatus;
+import com.rentalhive.repository.EquipmentItemRepository;
 import com.rentalhive.repository.OfferRepository;
 import com.rentalhive.repository.OrderEquipmentRepository;
+import com.rentalhive.repository.ReservationRepository;
 import com.rentalhive.service.OfferService;
 import com.rentalhive.utils.CustomError;
 import com.rentalhive.utils.ValidationException;
@@ -23,6 +24,8 @@ public class OfferServiceImpl implements OfferService {
 
     private final OfferRepository offerRepository;
     private final OrderEquipmentRepository orderEquipmentRepository;
+    private final EquipmentItemRepository equipmentItemRepository;
+    private final ReservationRepository reservationRepository;
     private final User userConnected;
 
     public Offer getOfferIfExist(Long id) throws ValidationException {
@@ -52,8 +55,10 @@ public class OfferServiceImpl implements OfferService {
             throw new ValidationException(
                 new CustomError("Order equipment reference","Order equipment does not match")
             );
+        orderEquipments.forEach(orderEquipment ->
+            orderEquipmentRepository.updateRentPriceById(orderEquipment.getId(), orderEquipment.getRentPrice())
+        );
         Double overallCost = orderEquipments.stream().mapToDouble(OrderEquipment::getRentPrice).sum();
-        orderEquipmentRepository.saveAll(orderEquipments);
         offer.setOverallCost(overallCost);
         return offerRepository.save(offer);
     }
@@ -65,8 +70,15 @@ public class OfferServiceImpl implements OfferService {
         if( ! List.of(OfferStatus.PENDING, OfferStatus.NEGOTIATING).contains(offer.getStatus()))
             invalidAction();
         offer.setStatus(OfferStatus.FULFILLED);
-        //todo:change equipment items status to borrowed
-        //todo:add reservation
+        offer.getOrder().getOrderEquipments().forEach(orderEquipment -> {
+            Long equipmentId = orderEquipment.getEquipmentItem().getId();
+            equipmentItemRepository.updateStatusById(equipmentId, EquipmentItemStatus.BORROWED);
+        });
+        reservationRepository.save(
+                Reservation.builder()
+                        .offer(offer)
+                        .build()
+        );
         return offerRepository.save(offer);
     }
 
