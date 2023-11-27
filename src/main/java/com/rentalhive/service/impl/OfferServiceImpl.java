@@ -70,11 +70,10 @@ public class OfferServiceImpl implements OfferService {
         if( ! List.of(OfferStatus.PENDING, OfferStatus.NEGOTIATING).contains(offer.getStatus()))
             invalidAction();
         offer.setStatus(OfferStatus.FULFILLED);
-        List<EquipmentItem> borrowedOrderEquipmentItems = offer.getOrder().getOrderEquipments().stream().map(orderEquipment -> {
-            orderEquipment.getEquipmentItem().setStatus(EquipmentItemStatus.BORROWED);
-            return orderEquipment.getEquipmentItem();
-        }).toList();
-        equipmentItemRepository.saveAll(borrowedOrderEquipmentItems);
+        offer.getOrder().getOrderEquipments().forEach(orderEquipment -> {
+            Long equipmentId = orderEquipment.getEquipmentItem().getId();
+            equipmentItemRepository.updateStatusById(equipmentId, EquipmentItemStatus.BORROWED);
+        });
         reservationRepository.save(
                 Reservation.builder()
                         .offer(offer)

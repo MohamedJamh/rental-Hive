@@ -3,8 +3,10 @@ package com.rentalhive.repository;
 import com.rentalhive.domain.EquipmentItem;
 import com.rentalhive.enums.EquipmentItemStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,6 +35,9 @@ public interface EquipmentItemRepository extends JpaRepository<EquipmentItem, Lo
 
     @Query("SELECT COUNT(ei) FROM EquipmentItem ei WHERE ei.equipment.id = :equipmentId")
     int countByEquipmentId(Long equipmentId);
+
+    @Transactional
+    @Modifying
     @Query("update EquipmentItem ei set ei.status = :status where ei.id = :id")
     void updateStatusById(Long id, EquipmentItemStatus status);
 }
