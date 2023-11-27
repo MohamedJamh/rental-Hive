@@ -1,14 +1,16 @@
 package com.rentalhive.service.impl;
 
 import com.rentalhive.domain.Equipment;
+import com.rentalhive.domain.EquipmentFamily;
 import com.rentalhive.domain.EquipmentItem;
 import com.rentalhive.enums.EquipmentItemStatus;
 import com.rentalhive.repository.EquipmentRepository;
+import com.rentalhive.repository.FamilyRepository;
 import com.rentalhive.service.EquipmentItemService;
 import com.rentalhive.service.EquipmentService;
 import com.rentalhive.utils.CustomError;
 import com.rentalhive.utils.ValidationException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,22 +20,20 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class EquipmentServiceImpl implements EquipmentService {
 
     private final EquipmentRepository equipmentRepository;
+    private final FamilyRepository familyRepository;
     private final EquipmentItemService equipmentItemService;
 
-    @Autowired
-    public EquipmentServiceImpl(EquipmentRepository equipmentRepository,
-                                EquipmentItemService equipmentItemService) {
-        this.equipmentRepository = equipmentRepository;
-        this.equipmentItemService = equipmentItemService;
-    }
 
     @Override
     @Transactional
     public Equipment save(Equipment equipment) throws ValidationException {
-        // TODO: 2021-05-11  add validation for equipment family
+        Optional<EquipmentFamily> optionalEquipmentFamily = familyRepository.findById(equipment.getEquipmentFamily().getId());
+        if(optionalEquipmentFamily.isEmpty())
+            throw new ValidationException(new CustomError("Equipment family","Equipment family does not exist"));
         Optional<Equipment> optionalEquipment = equipmentRepository.findByName(equipment.getName());
         if(optionalEquipment.isPresent())
             throw new ValidationException(new CustomError("name","Equipment name already exists"));

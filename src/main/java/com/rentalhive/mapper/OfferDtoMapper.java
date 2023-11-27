@@ -2,8 +2,12 @@ package com.rentalhive.mapper;
 
 import com.rentalhive.domain.Offer;
 import com.rentalhive.domain.Order;
+import com.rentalhive.domain.OrderEquipment;
 import com.rentalhive.dto.OfferDto;
 import com.rentalhive.enums.OfferStatus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OfferDtoMapper {
 
@@ -20,15 +24,20 @@ public class OfferDtoMapper {
                 .build();
     }
 
-    public static Offer toEntity(OfferDto orderDto) {
+    public static Offer toEntity(OfferDto offerDto) {
+        List<OrderEquipment> orderEquipments = new ArrayList<>();
+        offerDto.getOrderEquipments().stream()
+                .map(OrderEquipmentItemResponseDtoMapper::toEntity)
+                .forEach(orderEquipments::add);
+
         return Offer.builder()
-                .negotiable(orderDto.getNegotiable())
-                .overallCost(orderDto.getOverallCost())
-                .status(OfferStatus.valueOf(orderDto.getStatus()))
+                .negotiable(offerDto.getNegotiable())
+                .status(OfferStatus.valueOf(offerDto.getStatus()))
                 .order(
                         Order.builder()
-                                .id(orderDto.getOrderId())
-                                .build()
+                            .id(offerDto.getOrderId())
+                            .orderEquipments(orderEquipments)
+                            .build()
                 )
                 .build();
     }
