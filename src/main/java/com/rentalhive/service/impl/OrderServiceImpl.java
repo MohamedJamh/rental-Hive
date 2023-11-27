@@ -4,6 +4,7 @@ import com.rentalhive.domain.*;
 import com.rentalhive.dto.OrderDto;
 import com.rentalhive.dto.request.EquipmentRequestDTO;
 import com.rentalhive.dto.response.OrderResponseDto;
+import com.rentalhive.exception.OrderDateException;
 import com.rentalhive.exception.QuantityExceededException;
 import com.rentalhive.mapper.OrderDtoMapper;
 import com.rentalhive.mapper.OrderResponseDtoMapper;
@@ -28,12 +29,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderResponseDto createOrder(OrderDto orderDto) throws QuantityExceededException {
-        List<EquipmentRequestDTO> equipments = orderDto.getEquipments();
-
-        checkIfClientDoesNotHaveOrder();
+    public OrderResponseDto createOrder(OrderDto orderDto) throws Exception {
         checkIfCanReserveEquipments(orderDto);
+        checkIfClientDoesNotHaveOrder();
 
+        List<EquipmentRequestDTO> equipments = orderDto.getEquipments();
         LocalDateTime endDate = orderDto.getEndDate();
         LocalDateTime startDate = orderDto.getStartDate();
         final List<OrderEquipment> orderEquipment = new ArrayList<>();
@@ -84,13 +84,20 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findAll();
     }
 
-    private void checkIfCanReserveEquipments(OrderDto orderDto) {
+    public void checkIfCanReserveEquipments(OrderDto orderDto) throws OrderDateException {
         List<EquipmentRequestDTO> equipments = orderDto.getEquipments();
         if(equipments.isEmpty())
-            throw new RuntimeException("No equipment is selected");
+            throw new IllegalArgumentException("No equipment is selected");
 
-        if(orderDto.getEndDate()
-                .isBefore(orderDto.getStartDate()))
-            throw new RuntimeException("Date start should be before date end");
+        validateDate(orderDto.getStartDate(), orderDto.getEndDate());
+    }
+
+    private void validateDate(LocalDateTime startDate, LocalDateTime endDate) throws OrderDateException {
+
+        if(startDate.isBefore(LocalDateTime.now()))
+            throw new OrderDateException( "Start Date should be after now", "startDate");
+
+        if(endDate.isBefore(startDate))
+            throw new OrderDateException("Date start should be before date end", "date");
     }
 }
