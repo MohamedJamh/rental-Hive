@@ -14,6 +14,4 @@ public class OrderEquipmentRequestDto {
     @NotNull(message = "Equipment reservation price is required")
     @Min(value = 0, message = "Price cannot be negative")
     private Double price;
-    @NotNull(message = "Equipment reserved is required")
-    private String reference;
 }

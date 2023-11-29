@@ -1,5 +1,6 @@
 package com.rentalhive.advice;
 
+import com.rentalhive.exception.OrderDateException;
 import com.rentalhive.exception.QuantityExceededException;
 import com.rentalhive.utils.CustomError;
 import com.rentalhive.utils.Response;
@@ -38,6 +39,20 @@ public class AppExceptionHandler {
         response.setMessage("Quantity reservation exception");
         errorList.add(CustomError.builder()
                 .field("quantityReserved")
+                .message(ex.getMessage())
+                .build());
+        response.setErrors(errorList);
+        return response;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(OrderDateException.class)
+    private Response<Object> handleValidationExceptions(OrderDateException ex) {
+        Response<Object> response = new Response<>();
+        List<CustomError> errorList = new ArrayList<>();
+        response.setMessage("Dates errors");
+        errorList.add(CustomError.builder()
+                .field(ex.getField())
                 .message(ex.getMessage())
                 .build());
         response.setErrors(errorList);
