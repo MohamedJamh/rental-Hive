@@ -1,7 +1,7 @@
 package com.rentalhive.web.rest;
 
-import com.rentalhive.domain.Reservation;
-import com.rentalhive.service.ReservationService;
+import com.rentalhive.dto.response.ReservationResponseDto;
+import com.rentalhive.service.impl.ReservationServiceImpl;
 import com.rentalhive.utils.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,15 +15,16 @@ import java.util.List;
 @RequestMapping("/api/v1/reservation")
 @RequiredArgsConstructor
 public class ReservationRest {
-
-    private final ReservationService reservationService;
-
+    private final ReservationServiceImpl reservationService;
     @GetMapping
-    public ResponseEntity<Response<List<Reservation>>> findAll() {
-        return ResponseEntity.ok(Response.<List<Reservation>>builder()
-                .message("Reservation found")
-                .result(reservationService.findAll())
-                .build());
+    public ResponseEntity<Response<List<ReservationResponseDto>>> getAllReservations() {
+        Response<List<ReservationResponseDto>> response = new Response<>();
+        List<ReservationResponseDto> reservations = reservationService.getAllReservations();
+        if(reservations.isEmpty())
+            response.setMessage("No reservations found");
+        else
+            response.setMessage("All reservations");
+        response.setResult(reservations);
+        return ResponseEntity.ok().body(response);
     }
-
 }
