@@ -6,6 +6,7 @@ import com.rentalhive.domain.Location;
 import com.rentalhive.dto.OrderDto;
 import com.rentalhive.dto.response.EquipmentResponseDTO;
 import com.rentalhive.dto.response.OrderResponseDto;
+import com.rentalhive.exception.OrderDateException;
 import com.rentalhive.exception.QuantityExceededException;
 import com.rentalhive.service.EquipmentItemService;
 import com.rentalhive.service.EquipmentService;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -30,11 +32,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class OrderServiceTest {
 
-    @InjectMocks
+    @Autowired
     private OrderServiceImpl orderService;
-    @Mock
+    @Autowired
     private EquipmentService equipmentService;
-    @Mock
+    @Autowired
     private EquipmentItemService equipmentItemService;
 
     @BeforeAll
@@ -53,7 +55,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    void testExistenceOfEquipmentItemsAvailable() {
+    void testExistenceOfEquipmentItemsAvailable() throws OrderDateException {
 
         List<EquipmentResponseDTO> availableEquipments = equipmentItemService.findAvailableEquipments(LocalDateTime.now(), LocalDateTime.now().plusDays(7));
 
@@ -72,7 +74,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void testCreateOrder() throws QuantityExceededException, ValidationException {
+    public void testCreateOrder() throws Exception, ValidationException {
         // Arrange
         LocalDateTime rentStartDate = LocalDateTime.now();
         LocalDateTime rentEndDate = rentStartDate.plusDays(7);
