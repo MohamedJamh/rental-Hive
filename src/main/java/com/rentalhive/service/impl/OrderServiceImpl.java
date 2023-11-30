@@ -6,9 +6,11 @@ import com.rentalhive.dto.request.EquipmentRequestDTO;
 import com.rentalhive.dto.response.OrderResponseDto;
 import com.rentalhive.exception.OrderDateException;
 import com.rentalhive.exception.QuantityExceededException;
+import com.rentalhive.exception.ResourceNotFoundException;
 import com.rentalhive.mapper.OrderDtoMapper;
 import com.rentalhive.mapper.OrderResponseDtoMapper;
 import com.rentalhive.repository.OrderRepository;
+import com.rentalhive.service.EquipmentService;
 import com.rentalhive.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ public class OrderServiceImpl implements OrderService {
     private final EquipmentItemServiceImpl equipmentItemService;
     private final User userConnected;
     private final OrderEquipmentService orderEquipmentService;
+    private final EquipmentService equipmentService;
 
     @Override
     @Transactional
@@ -84,12 +87,20 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findAll();
     }
 
-    public void checkIfCanReserveEquipments(OrderDto orderDto) throws OrderDateException {
+    public void checkIfCanReserveEquipments(OrderDto orderDto) throws OrderDateException, ResourceNotFoundException {
         List<EquipmentRequestDTO> equipments = orderDto.getEquipments();
         if(equipments.isEmpty())
             throw new IllegalArgumentException("No equipment is selected");
 
         validateDate(orderDto.getStartDate(), orderDto.getEndDate());
+        checkIfEquipmentsExists(equipments);
+    }
+
+    private void checkIfEquipmentsExists(List<EquipmentRequestDTO> equipments) throws ResourceNotFoundException{
+        for(EquipmentRequestDTO equipmentRequestDTO: equipments) {
+            equipmentService.findById(equipmentRequestDTO.getId()).orElseThrow(() ->
+                    new ResourceNotFoundException("EquipmentId", "Equipment with id " + equipmentRequestDTO.getId() + " does not exist"));
+        }
     }
 
     private void validateDate(LocalDateTime startDate, LocalDateTime endDate) throws OrderDateException {
