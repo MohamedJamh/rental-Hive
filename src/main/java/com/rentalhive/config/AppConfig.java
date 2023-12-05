@@ -17,16 +17,6 @@ public class AppConfig {
     DataSource dataSource;
 
     @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-
-        // Specify the allowed origins from properties
-        config.addAllowedOrigin("http://localhost:4200");
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
-    }
-    @Bean
     public SpringLiquibase liquibase() {
         SpringLiquibase liquibase = new SpringLiquibase();
         liquibase.setChangeLog("classpath:db/changelog/master.xml");
