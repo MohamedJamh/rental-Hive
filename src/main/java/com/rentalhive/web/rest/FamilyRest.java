@@ -56,8 +56,12 @@ public class FamilyRest {
     }
 
     @GetMapping
-    public List<EquipmentFamily> findAll(){
-        return familyService.findAll();
+    public ResponseEntity<Response<List<EquipmentFamily>>> findAll(){
+        Response<List<EquipmentFamily>> response = new Response<>();
+        List<EquipmentFamily> equipmentFamilies = familyService.findAll();
+        response.setResult(equipmentFamilies);
+        response.setMessage("Equipment family has been found successfully");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
