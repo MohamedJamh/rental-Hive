@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/equipment-family")
+@RequestMapping("/api/v1/equipment-family")
 public class FamilyRest {
     private final FamilyService familyService;
 
