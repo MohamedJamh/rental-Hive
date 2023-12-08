@@ -33,7 +33,7 @@ public class RequestUserDto {
     private String email;
 
     @NotBlank(message = "Password cannot be blank")
-    @Min(value = 8,message = "Password should be at least 8 characters")
+    //@Min(value = 8,message = "Password should be at least 8 characters")
     private String password;
 
     private List<Long> rolesId;

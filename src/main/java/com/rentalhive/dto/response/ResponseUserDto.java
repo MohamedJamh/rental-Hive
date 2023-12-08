@@ -1,6 +1,8 @@
 package com.rentalhive.dto.response;
 
 
+import com.rentalhive.domain.Organization;
+import com.rentalhive.dto.OrganizationDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,5 +24,5 @@ public class ResponseUserDto {
     private LocalDateTime createdAt;
     private LocalDateTime verifiedAt;
     private List<Long> rolesId;
-    private String organizationName;
+    private OrganizationDto organization;
 }
