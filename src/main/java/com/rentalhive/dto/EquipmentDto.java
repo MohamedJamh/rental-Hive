@@ -1,5 +1,6 @@
 package com.rentalhive.dto;
 
+import com.rentalhive.domain.EquipmentFamily;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,5 +23,5 @@ public class EquipmentDto {
     @Min(value = 0, message = "Quantity must be greater than or equal to 0")
     private Integer quantity;
     @NotNull(message = "Equipment must not be null")
-    private Long equipmentFamilyId;
+    private EquipmentFamily equipmentFamily;
 }

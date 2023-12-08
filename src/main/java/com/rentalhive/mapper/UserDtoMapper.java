@@ -41,7 +41,9 @@ public class UserDtoMapper {
                 .createdAt(user.getCreatedAt())
                 .verifiedAt(user.getVerifiedAt())
                 .rolesId(user.getRoles().stream().map(Role::getId).toList())
-                .organizationName(user.getOrganization().getName())
+                .organization(
+                        OrganizationDtoMapper.toDto(user.getOrganization())
+                )
                 .build();
     }
 }
